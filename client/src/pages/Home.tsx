@@ -5,6 +5,8 @@ import Industries from '@/components/Industries';
 import CaseStudies from '@/components/CaseStudies';
 import Testimonials from '@/components/Testimonials';
 import Awards from '@/components/Awards';
+import About from '@/components/About';
+import Team from '@/components/Team';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
@@ -34,6 +36,12 @@ export default function Home() {
 
       {/* Awards Section */}
       <Awards />
+
+      {/* About Section */}
+      <About />
+
+      {/* Team Section */}
+      <Team />
 
       {/* Services Section (Placeholder) */}
       <motion.section
