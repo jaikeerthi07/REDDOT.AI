@@ -1,8 +1,8 @@
-import Hero from '@/components/Hero';
+import HeroEnhanced from '@/components/HeroEnhanced';
 import TrustedCompanies from '@/components/TrustedCompanies';
-import Services from '@/components/Services';
+import ServicesEnhanced from '@/components/ServicesEnhanced';
 import Industries from '@/components/Industries';
-import CaseStudies from '@/components/CaseStudies';
+import CaseStudiesEnhanced from '@/components/CaseStudiesEnhanced';
 import Testimonials from '@/components/Testimonials';
 import Awards from '@/components/Awards';
 import About from '@/components/About';
@@ -19,13 +19,13 @@ export default function Home() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <Hero />
+      <HeroEnhanced />
 
       {/* Trusted Companies */}
       <TrustedCompanies />
 
       {/* Services Section */}
-      <Services />
+      <ServicesEnhanced />
 
       {/* AI Solutions Timeline */}
       <AITimeline />
@@ -37,7 +37,7 @@ export default function Home() {
       <Industries />
 
       {/* Case Studies Section */}
-      <CaseStudies />
+      <CaseStudiesEnhanced />
 
       {/* Testimonials Section */}
       <Testimonials />
