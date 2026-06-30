@@ -1,28 +1,122 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
-  Zap, Brain, Cpu, Code, Smartphone, Wifi, Cloud, Lock,
-  Database, Cog, TrendingUp, Shield, Layers, Rocket, Settings, Lightbulb
+  Brain,
+  Zap,
+  Code,
+  Cloud,
+  Shield,
+  BarChart3,
+  Cpu,
+  Database,
+  GitBranch,
+  Smartphone,
+  Wifi,
+  Cog,
+  Lock,
+  TrendingUp,
+  Layers,
+  Lightbulb,
 } from 'lucide-react';
 
 export default function Services() {
   const services = [
-    { title: 'AI Agents', desc: 'Intelligent autonomous systems', icon: Zap },
-    { title: 'Generative AI', desc: 'Creative content generation', icon: Lightbulb },
-    { title: 'Machine Learning', desc: 'Predictive analytics', icon: Brain },
-    { title: 'Deep Learning', desc: 'Neural network solutions', icon: Cpu },
-    { title: 'LLM Development', desc: 'Custom language models', icon: Code },
-    { title: 'RAG Systems', desc: 'Retrieval-augmented generation', icon: Database },
-    { title: 'AI Automation', desc: 'Process automation', icon: Cog },
-    { title: 'SaaS Development', desc: 'Cloud-based applications', icon: Cloud },
-    { title: 'Enterprise Software', desc: 'Scalable solutions', icon: Layers },
-    { title: 'Web Development', desc: 'Modern web apps', icon: Code },
-    { title: 'Mobile Apps', desc: 'iOS & Android', icon: Smartphone },
-    { title: 'IoT Solutions', desc: 'Connected devices', icon: Wifi },
-    { title: 'Embedded Systems', desc: 'Hardware integration', icon: Cpu },
-    { title: 'Cloud Engineering', desc: 'Infrastructure', icon: Cloud },
-    { title: 'Cyber Security', desc: 'Protection & compliance', icon: Lock },
-    { title: 'Data Analytics', desc: 'Business intelligence', icon: TrendingUp },
+    {
+      icon: Brain,
+      title: 'AI Agents',
+      description: 'Autonomous intelligent agents that learn and adapt to complex business processes.',
+      color: 'from-blue-600 to-blue-400',
+    },
+    {
+      icon: Zap,
+      title: 'Generative AI',
+      description: 'Custom generative AI solutions for content creation and automation.',
+      color: 'from-purple-600 to-purple-400',
+    },
+    {
+      icon: TrendingUp,
+      title: 'Machine Learning',
+      description: 'Advanced ML models for predictive analytics and optimization.',
+      color: 'from-cyan-600 to-cyan-400',
+    },
+    {
+      icon: Layers,
+      title: 'Deep Learning',
+      description: 'Neural networks for image recognition, NLP, and complex pattern detection.',
+      color: 'from-pink-600 to-pink-400',
+    },
+    {
+      icon: Lightbulb,
+      title: 'LLM Development',
+      description: 'Custom language models fine-tuned for your specific use cases.',
+      color: 'from-orange-600 to-orange-400',
+    },
+    {
+      icon: Database,
+      title: 'RAG Systems',
+      description: 'Retrieval-augmented generation for knowledge-enhanced AI systems.',
+      color: 'from-green-600 to-green-400',
+    },
+    {
+      icon: Zap,
+      title: 'AI Automation',
+      description: 'Intelligent automation of business processes and workflows.',
+      color: 'from-red-600 to-red-400',
+    },
+    {
+      icon: Code,
+      title: 'SaaS Development',
+      description: 'Scalable software-as-a-service platforms built for growth.',
+      color: 'from-indigo-600 to-indigo-400',
+    },
+    {
+      icon: Code,
+      title: 'Web Development',
+      description: 'Modern, responsive web applications with cutting-edge technologies.',
+      color: 'from-blue-600 to-cyan-400',
+    },
+    {
+      icon: Smartphone,
+      title: 'Mobile Apps',
+      description: 'Native and cross-platform mobile applications for iOS and Android.',
+      color: 'from-purple-600 to-pink-400',
+    },
+    {
+      icon: Wifi,
+      title: 'IoT Solutions',
+      description: 'Connected IoT devices and edge computing solutions.',
+      color: 'from-cyan-600 to-blue-400',
+    },
+    {
+      icon: Cpu,
+      title: 'Embedded Systems',
+      description: 'Firmware and embedded software for hardware devices.',
+      color: 'from-orange-600 to-yellow-400',
+    },
+    {
+      icon: Cloud,
+      title: 'Cloud Engineering',
+      description: 'AWS, Azure, and GCP infrastructure design and optimization.',
+      color: 'from-blue-600 to-purple-400',
+    },
+    {
+      icon: Shield,
+      title: 'Cyber Security',
+      description: 'Security audits, penetration testing, and threat protection.',
+      color: 'from-red-600 to-pink-400',
+    },
+    {
+      icon: BarChart3,
+      title: 'Data Analytics',
+      description: 'Data pipelines, analytics platforms, and business intelligence.',
+      color: 'from-green-600 to-cyan-400',
+    },
+    {
+      icon: GitBranch,
+      title: 'Digital Transformation',
+      description: 'End-to-end digital transformation consulting and implementation.',
+      color: 'from-purple-600 to-blue-400',
+    },
   ];
 
   const containerVariants = {
@@ -30,47 +124,47 @@ export default function Services() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
         delayChildren: 0.2,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 40 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5 },
+      transition: { duration: 0.6, ease: 'easeOut' as any },
     },
   };
 
   return (
-    <section id="services" className="py-24 bg-background relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
+    <section className="py-32 bg-background relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 -z-10">
         <motion.div
-          className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500 opacity-5 rounded-full blur-3xl"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30"
           animate={{
-            x: [0, 40, 0],
-            y: [0, -40, 0],
+            x: [0, 100, 0],
+            y: [0, -100, 0],
           }}
           transition={{
-            duration: 10,
+            duration: 15,
             repeat: Infinity,
-            ease: 'easeInOut',
+            ease: 'easeInOut' as any,
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500 opacity-5 rounded-full blur-3xl"
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-30"
           animate={{
-            x: [0, -40, 0],
-            y: [0, 40, 0],
+            x: [0, -100, 0],
+            y: [0, 100, 0],
           }}
           transition={{
-            duration: 10,
+            duration: 18,
             repeat: Infinity,
-            ease: 'easeInOut',
+            ease: 'easeInOut' as any,
           }}
         />
       </div>
@@ -78,20 +172,30 @@ export default function Services() {
       <div className="container">
         {/* Section Header */}
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
         >
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-2">
+          <motion.p
+            className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             Our Services
-          </p>
-          <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
-            Comprehensive AI & Enterprise Solutions
+          </motion.p>
+          <h2 className="text-6xl md:text-7xl font-bold text-foreground mb-6">
+            Comprehensive AI &
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Enterprise Solutions
+            </span>
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            From AI agents to cloud engineering, we deliver cutting-edge technology solutions tailored to your business needs.
+            From AI development to cloud infrastructure, we offer end-to-end solutions for modern enterprises.
           </p>
         </motion.div>
 
@@ -108,45 +212,47 @@ export default function Services() {
             return (
               <motion.div
                 key={idx}
-                className="group relative p-6 rounded-xl border border-slate-200 bg-white hover:border-blue-500 transition-all duration-300 overflow-hidden"
+                className="group relative h-full rounded-2xl overflow-hidden cursor-pointer"
                 variants={itemVariants}
-                whileHover={{
-                  y: -8,
-                  boxShadow: '0 20px 40px rgba(37, 99, 235, 0.15)',
-                }}
+                whileHover={{ y: -12 }}
               >
-                {/* Gradient Background on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {/* Background Gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
 
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4 group-hover:bg-blue-500 transition-colors">
-                    <Icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
-                  </div>
+                {/* Card */}
+                <div className="relative h-full p-8 rounded-2xl border border-slate-200 bg-white group-hover:border-blue-500 transition-all duration-300 flex flex-col">
+                  {/* Icon Container */}
+                  <motion.div
+                    className={`w-16 h-16 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-125 transition-transform`}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Icon className="w-8 h-8 text-white" />
+                  </motion.div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                  {/* Content */}
+                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-blue-600 transition-colors">
                     {service.title}
                   </h3>
-
-                  <p className="text-slate-600 text-sm mb-4">
-                    {service.desc}
+                  <p className="text-slate-600 text-sm flex-1 mb-4">
+                    {service.description}
                   </p>
 
+                  {/* Arrow */}
                   <motion.div
-                    className="flex items-center text-blue-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ x: -10 }}
-                    whileHover={{ x: 0 }}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
                   >
-                    Learn more →
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                      <span className="text-blue-600 font-bold">→</span>
+                    </div>
                   </motion.div>
                 </div>
 
-                {/* Animated Border */}
+                {/* Glow Effect */}
                 <motion.div
-                  className="absolute inset-0 rounded-xl border border-blue-500 opacity-0 group-hover:opacity-100"
-                  initial={{ pathLength: 0 }}
-                  whileHover={{ pathLength: 1 }}
-                  transition={{ duration: 0.6 }}
+                  className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 blur-xl transition-opacity duration-500 -z-10`}
                 />
               </motion.div>
             );
@@ -155,16 +261,16 @@ export default function Services() {
 
         {/* CTA Section */}
         <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
+          className="mt-20 text-center"
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 text-lg mb-6">
             Need a custom solution? Let's discuss your specific requirements.
           </p>
-          <Button className="bg-blue-600 text-white hover:bg-blue-700 px-8 py-3">
+          <Button className="bg-blue-600 text-white hover:bg-blue-700 px-8 py-3 rounded-lg font-semibold">
             Schedule Consultation
           </Button>
         </motion.div>
