@@ -7,6 +7,8 @@ import Testimonials from '@/components/Testimonials';
 import Awards from '@/components/Awards';
 import About from '@/components/About';
 import Team from '@/components/Team';
+import AITimeline from '@/components/AITimeline';
+import HowWeWork from '@/components/HowWeWork';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
@@ -24,6 +26,12 @@ export default function Home() {
 
       {/* Services Section */}
       <Services />
+
+      {/* AI Solutions Timeline */}
+      <AITimeline />
+
+      {/* How We Work */}
+      <HowWeWork />
 
       {/* Industries Section */}
       <Industries />
