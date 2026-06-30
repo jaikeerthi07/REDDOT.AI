@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Satoshi:wght@400;500;600;700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -40,9 +41,45 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-foreground-tertiary: #334155;
+  --color-foreground-quaternary: #64748B;
+  --color-background-secondary: #FFFFFF;
+  --color-background-tertiary: #F8F9FA;
+  --color-background-quaternary: #F4F6F8;
+  --color-accent-primary: #2563EB;
+  --color-accent-secondary: #3B82F6;
+  --color-accent-tertiary: #06B6D4;
+  --color-accent-quaternary: #8B5CF6;
 }
 
 :root {
+  /* REDDOT Brand Colors */
+  --reddot-primary: #2563EB;
+  --reddot-secondary: #3B82F6;
+  --reddot-tertiary: #06B6D4;
+  --reddot-accent: #8B5CF6;
+  --reddot-success: #10B981;
+  
+  /* Light mode backgrounds */
+  --background-light: #FAFBFC;
+  --background-secondary: #FFFFFF;
+  --background-tertiary: #F8F9FA;
+  --background-quaternary: #F4F6F8;
+  
+  /* Text colors */
+  --text-primary: #0F172A;
+  --text-secondary: #1E293B;
+  --text-tertiary: #334155;
+  --text-quaternary: #64748B;
+  
+  /* Borders */
+  --border-light: #E2E8F0;
+  
+  /* Ease functions for animations */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-in: cubic-bezier(0.42, 0, 1, 1);
+  
   --primary: var(--color-blue-700);
   --primary-foreground: var(--color-blue-50);
   --sidebar-primary: var(--color-blue-600);
@@ -117,9 +154,50 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', 'Satoshi', 'General Sans', 'SF Pro Display', sans-serif;
   }
+  
+  h1 {
+    @apply text-7xl font-bold tracking-tight;
+    font-family: 'Satoshi', 'Inter', sans-serif;
+  }
+  
+  h2 {
+    @apply text-5xl font-bold tracking-tight;
+    font-family: 'Satoshi', 'Inter', sans-serif;
+  }
+  
+  h3 {
+    @apply text-4xl font-bold tracking-tight;
+    font-family: 'Satoshi', 'Inter', sans-serif;
+  }
+  
+  h4 {
+    @apply text-2xl font-semibold;
+    font-family: 'Inter', 'Satoshi', sans-serif;
+  }
+  
+  h5 {
+    @apply text-xl font-semibold;
+    font-family: 'Inter', 'Satoshi', sans-serif;
+  }
+  
+  h6 {
+    @apply text-base font-semibold;
+    font-family: 'Inter', 'Satoshi', sans-serif;
+  }
+  
+  p {
+    @apply text-lg leading-relaxed;
+  }
+  
+  small {
+    @apply text-sm text-foreground-quaternary;
+  }
+  
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
@@ -134,24 +212,11 @@
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -162,16 +227,211 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
+  }
+  
+  /* Glass morphism effects */
+  .glass {
+    @apply backdrop-blur-md bg-white/80 border border-white/20 rounded-lg;
+  }
+  
+  .glass-dark {
+    @apply backdrop-blur-md bg-black/10 border border-white/10 rounded-lg;
+  }
+  
+  /* Gradient backgrounds */
+  .gradient-primary {
+    background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+  }
+  
+  .gradient-secondary {
+    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+  }
+  
+  .gradient-accent {
+    background: linear-gradient(135deg, #06B6D4 0%, #10B981 100%);
+  }
+  
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+  }
+  
+  /* Magnetic button effect */
+  .magnetic-button {
+    @apply transition-all duration-200;
+    cursor: pointer;
+  }
+  
+  .magnetic-button:active {
+    @apply scale-95;
+  }
+  
+  /* Hover lift effect */
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+  
+  .hover-lift:hover {
+    @apply -translate-y-2 shadow-xl;
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground-quaternary rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-foreground-tertiary;
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+  
+  @keyframes slide-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slide-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes rotate-in {
+    from {
+      opacity: 0;
+      transform: rotate(-10deg) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+  }
+  
+  @keyframes blur-in {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  .animate-slide-in-up {
+    animation: slide-in-up 0.6s var(--ease-out) forwards;
+  }
+  
+  .animate-slide-in-down {
+    animation: slide-in-down 0.6s var(--ease-out) forwards;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s var(--ease-out) forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.6s var(--ease-out) forwards;
+  }
+  
+  .animate-rotate-in {
+    animation: rotate-in 0.6s var(--ease-out) forwards;
+  }
+  
+  .animate-blur-in {
+    animation: blur-in 0.6s var(--ease-out) forwards;
+  }
+  
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Focus visible for accessibility */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-500;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
