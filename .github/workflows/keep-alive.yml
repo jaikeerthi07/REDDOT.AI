@@ -13,5 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping the server
-        # TODO: Replace the URL below with your actual Render URL once you deploy
-        run: curl -s https://your-app-name.onrender.com > /dev/null
+        # Pings the live Render URL every 10 minutes to prevent sleep
+        run: curl -s https://reddot-ai.onrender.com > /dev/null
