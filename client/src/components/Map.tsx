@@ -94,13 +94,32 @@ const MAPS_PROXY_URL = `${FORGE_BASE_URL}/v1/maps/proxy`;
 
 function loadMapScript() {
   return new Promise(resolve => {
+    if (window.google && window.google.maps) {
+      resolve(null);
+      return;
+    }
+    
+    // Check if script is already injected
+    if (document.querySelector('script[src^="' + MAPS_PROXY_URL + '/maps/api/js"]')) {
+      const checkInterval = setInterval(() => {
+        if (window.google && window.google.maps) {
+          clearInterval(checkInterval);
+          resolve(null);
+        }
+      }, 100);
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = `${MAPS_PROXY_URL}/maps/api/js?key=${API_KEY}&v=weekly&libraries=marker,places,geocoding,geometry`;
     script.async = true;
     script.crossOrigin = "anonymous";
     script.onload = () => {
       resolve(null);
-      script.remove(); // Clean up immediately
+      // We do not remove the script because that does not wipe window.google, 
+      // but if we do remove it, our querySelector above might fail if it's called 
+      // before window.google.maps is fully ready and the script was removed. 
+      // It's safer to keep it, but we can leave it as is if it doesn't cause issues.
     };
     script.onerror = () => {
       console.error("Failed to load Google Maps script");
@@ -118,7 +137,7 @@ interface MapViewProps {
 
 export function MapView({
   className,
-  initialCenter = { lat: 37.7749, lng: -122.4194 },
+  initialCenter = { lat: 13.0827, lng: 80.2707 },
   initialZoom = 12,
   onMapReady,
 }: MapViewProps) {

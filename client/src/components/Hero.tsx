@@ -1,16 +1,16 @@
-import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { useEffect, useRef, memo } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
-export default function Hero() {
+const Hero = memo(function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Set canvas size
@@ -19,7 +19,7 @@ export default function Hero() {
       canvas.height = window.innerHeight;
     };
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     // Particle system
     interface Particle {
@@ -32,28 +32,45 @@ export default function Hero() {
     }
 
     const particles: Particle[] = [];
-    const particleCount = 50;
+    // Reduced particle count for better CPU performance
+    const particleCount = 30;
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
         radius: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.3,
+        opacity: Math.random() * 0.4 + 0.2,
       });
     }
 
-    // Animation loop
+    // Throttled animation loop — target ~30fps to cut CPU usage
     let animationId: number;
-    const animate = () => {
+    let lastTime = 0;
+    const FPS = 30;
+    const INTERVAL = 1000 / FPS;
+    let isVisible = true;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    });
+    observer.observe(canvas);
+
+    const animate = (timestamp: number) => {
+      animationId = requestAnimationFrame(animate);
+
+      if (!isVisible || document.hidden) return;
+      if (timestamp - lastTime < INTERVAL) return;
+      lastTime = timestamp;
+
       // Clear canvas with slight fade
-      ctx.fillStyle = 'rgba(250, 251, 252, 0.1)';
+      ctx.fillStyle = "rgba(250, 251, 252, 0.15)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Update and draw particles
-      particles.forEach((particle) => {
+      particles.forEach(particle => {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
@@ -70,17 +87,18 @@ export default function Hero() {
         ctx.fill();
       });
 
-      // Draw connections
+      // Draw connections (only check close neighbors for performance)
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < 150) {
-            const opacity = (1 - distance / 150) * 0.3;
+          if (distSq < 150 * 150) {
+            const distance = Math.sqrt(distSq);
+            const opacity = (1 - distance / 150) * 0.25;
             ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 0.8;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -88,14 +106,13 @@ export default function Hero() {
           }
         }
       }
-
-      animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animationId = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener("resize", resizeCanvas);
+      observer.disconnect();
       cancelAnimationFrame(animationId);
     };
   }, []);
@@ -121,12 +138,14 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative w-full min-h-[100svh] flex items-center justify-center overflow-hidden pt-32 pb-20 md:pt-20 md:pb-0">
       {/* Animated Background */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
-        style={{ background: 'linear-gradient(135deg, #FAFBFC 0%, #F8F9FA 100%)' }}
+        style={{
+          background: "linear-gradient(135deg, #FAFBFC 0%, #F8F9FA 100%)",
+        }}
       />
 
       {/* Gradient Overlay */}
@@ -134,25 +153,31 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="relative z-10 container max-w-4xl mx-auto px-4 text-center"
+        className="relative z-10 container max-w-4xl mx-auto px-4 text-center mt-12 md:mt-0"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        style={{ willChange: "opacity" }}
       >
         {/* Main Headline */}
         <motion.h1
-          className="text-6xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
+          className="text-5xl sm:text-6xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
           variants={itemVariants as any}
+          style={{ willChange: "transform, opacity" }}
         >
-          Engineering <span className="text-gradient">Intelligence</span> for the Future
+          Architecting <span className="text-gradient">Intelligence</span> for
+          the Modern Enterprise
         </motion.h1>
 
         {/* Subheadline */}
         <motion.p
           className="text-xl md:text-2xl text-foreground-tertiary mb-8 leading-relaxed max-w-3xl mx-auto"
           variants={itemVariants as any}
+          style={{ willChange: "transform, opacity" }}
         >
-          Building AI Systems, Enterprise Software, Automation Platforms, Machine Learning Solutions, and Smart Embedded Technologies for businesses worldwide.
+          Deploying mission-critical AI systems, intelligent automation, and
+          scalable software architectures to accelerate digital transformation
+          for global industry leaders.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -160,23 +185,29 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           variants={itemVariants as any}
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button className="px-8 py-6 text-lg bg-gradient-primary text-white hover:shadow-lg transition-shadow flex items-center gap-2">
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              className="px-8 py-6 text-lg bg-gradient-primary text-white hover:shadow-lg transition-shadow flex items-center gap-2"
+              onClick={() =>
+                document
+                  .getElementById("projects-section")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
               Start Your Project
               <ArrowRight size={20} />
             </Button>
           </motion.div>
 
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               variant="outline"
               className="px-8 py-6 text-lg border-2 border-foreground-tertiary hover:border-foreground transition-colors"
+              onClick={() =>
+                document
+                  .getElementById("services-section")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               Explore Services
             </Button>
@@ -200,4 +231,6 @@ export default function Hero() {
       </motion.div>
     </section>
   );
-}
+});
+
+export default Hero;

@@ -1,16 +1,61 @@
-import HeroEnhanced from '@/components/HeroEnhanced';
-import TrustedCompanies from '@/components/TrustedCompanies';
-import ServicesEnhanced from '@/components/ServicesEnhanced';
-import Industries from '@/components/Industries';
-import CaseStudiesEnhanced from '@/components/CaseStudiesEnhanced';
-import Testimonials from '@/components/Testimonials';
-import Awards from '@/components/Awards';
-import About from '@/components/About';
-import Team from '@/components/Team';
-import AITimeline from '@/components/AITimeline';
-import HowWeWork from '@/components/HowWeWork';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
+import Hero from "@/components/Hero";
+import TrustedCompanies from "@/components/TrustedCompanies";
+import { motion } from "framer-motion";
+
+// Lazy load components below the fold to improve initial load performance
+const Services = lazy(() => import("@/components/Services"));
+const Industries = lazy(() => import("@/components/Industries"));
+const CaseStudies = lazy(() => import("@/components/CaseStudies"));
+
+const About = lazy(() => import("@/components/About"));
+const Team = lazy(() => import("@/components/Team"));
+const AITimeline = lazy(() => import("@/components/AITimeline"));
+const Statistics = lazy(() => import("@/components/Statistics"));
+const TechStack = lazy(() => import("@/components/TechStack"));
+
+function DeferredSection({
+  children,
+  minHeight = 420,
+  id,
+}: {
+  children: React.ReactNode;
+  minHeight?: number;
+  id?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || shouldRender) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldRender(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "900px 0px" }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [shouldRender]);
+
+  return (
+    <div
+      id={id}
+      ref={ref}
+      style={{ minHeight: shouldRender ? undefined : minHeight }}
+    >
+      {shouldRender ? (
+        <Suspense fallback={<div className="h-32" />}>{children}</Suspense>
+      ) : null}
+    </div>
+  );
+}
 
 /**
  * Home page showcasing REDDOT's services, solutions, and innovations
@@ -19,174 +64,119 @@ export default function Home() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <HeroEnhanced />
+      <Hero />
 
       {/* Trusted Companies */}
       <TrustedCompanies />
 
-      {/* Services Section */}
-      <ServicesEnhanced />
+      <DeferredSection id="services-section" minHeight={760}>
+        <Services />
+      </DeferredSection>
+      <DeferredSection minHeight={760}>
+        <AITimeline />
+      </DeferredSection>
+      <DeferredSection minHeight={420}>
+        <Statistics />
+      </DeferredSection>
+      <DeferredSection minHeight={680}>
+        <Industries />
+      </DeferredSection>
+      <DeferredSection id="projects-section" minHeight={700}>
+        <CaseStudies />
+      </DeferredSection>
+      <DeferredSection minHeight={760}>
+        <About />
+      </DeferredSection>
+      <DeferredSection minHeight={600}>
+        <Team />
+      </DeferredSection>
+      <DeferredSection minHeight={640}>
+        <TechStack />
+      </DeferredSection>
 
-      {/* AI Solutions Timeline */}
-      <AITimeline />
-
-      {/* How We Work */}
-      <HowWeWork />
-
-      {/* Industries Section */}
-      <Industries />
-
-      {/* Case Studies Section */}
-      <CaseStudiesEnhanced />
-
-      {/* Testimonials Section */}
-      <Testimonials />
-
-      {/* Awards Section */}
-      <Awards />
-
-      {/* About Section */}
-      <About />
-
-      {/* Team Section */}
-      <Team />
-
-      {/* Services Section (Placeholder) */}
+      {/* Final CTA Section */}
       <motion.section
-        className="py-20 bg-background"
+        className="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-700 text-white relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container">
-          <div className="text-center mb-12">
-            <p className="text-slate-500 text-sm font-semibold uppercase tracking-widest mb-2">
-              Our Services
-            </p>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Comprehensive AI & Enterprise Solutions
-            </h2>
-            <p className="text-xl text-foreground-tertiary max-w-2xl mx-auto">
-              From AI agents to cloud engineering, we deliver cutting-edge technology solutions tailored to your business needs.
-            </p>
-          </div>
+        {/* Background effects */}
+        <motion.div
+          className="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
+          style={{ willChange: "transform" }}
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"
+          style={{ willChange: "transform" }}
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {[
-              { title: 'AI Agents', desc: 'Intelligent autonomous systems' },
-              { title: 'Enterprise Software', desc: 'Scalable business solutions' },
-              { title: 'Cloud Engineering', desc: 'Modern infrastructure' },
-            ].map((service, idx) => (
-              <motion.div
-                key={idx}
-                className="p-6 rounded-lg border border-border bg-background-secondary hover:border-accent-primary transition-all"
-                whileHover={{ y: -4 }}
-              >
-                <h3 className="text-xl font-semibold text-foreground mb-2">{service.title}</h3>
-                <p className="text-foreground-tertiary">{service.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Button className="bg-gradient-primary text-white">
-              Explore All Services
-            </Button>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* AI Solutions Timeline (Placeholder) */}
-      <motion.section
-        className="py-20 bg-background-secondary border-t border-b border-border"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="container">
-          <div className="text-center mb-12">
-            <p className="text-slate-500 text-sm font-semibold uppercase tracking-widest mb-2">
-              AI Solutions Process
-            </p>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-              From Problem to Deployment
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {['Problem', 'Analysis', 'AI Models', 'Training', 'Deployment', 'Monitoring', 'Learning'].map((step, idx) => (
-              <motion.div
-                key={idx}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <div className="w-12 h-12 rounded-full bg-gradient-primary text-white flex items-center justify-center mx-auto mb-4 font-bold">
-                  {idx + 1}
-                </div>
-                <p className="font-semibold text-foreground">{step}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      {/* Technology Stack (Placeholder) */}
-      <motion.section
-        className="py-20 bg-background"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="container">
-          <div className="text-center mb-12">
-            <p className="text-slate-500 text-sm font-semibold uppercase tracking-widest mb-2">
-              Technology Stack
-            </p>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-              Built With Industry-Leading Tools
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {['Python', 'TensorFlow', 'PyTorch', 'React', 'Next.js', 'Docker', 'AWS', 'PostgreSQL', 'FastAPI', 'Kubernetes', 'Redis', 'OpenAI'].map((tech) => (
-              <motion.div
-                key={tech}
-                className="p-4 rounded-lg border border-border bg-background-secondary text-center hover:border-accent-primary transition-all"
-                whileHover={{ scale: 1.05 }}
-              >
-                <p className="font-semibold text-foreground-tertiary">{tech}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      {/* CTA Section */}
-      <motion.section
-        className="py-20 bg-gradient-primary text-white"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="container text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Let's discuss how REDDOT can help you build intelligent solutions for tomorrow.
-          </p>
-          <Button
-            className="bg-white text-blue-600 hover:bg-background-secondary"
+        <div className="container text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            Start Your Project
-          </Button>
+            <p className="text-white/70 text-sm font-semibold uppercase tracking-widest mb-4">
+              Get Started Today
+            </p>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Ready to Transform
+              <br />
+              Your Business?
+            </h2>
+            <p className="text-xl mb-10 text-white/80 max-w-2xl mx-auto leading-relaxed">
+              Let's discuss how REDDOT's AI solutions can accelerate your
+              growth, reduce costs, and unlock new possibilities.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.a
+                href="/contact"
+                className="px-10 py-4 bg-white text-blue-600 rounded-xl font-bold hover:bg-slate-100 transition-colors shadow-xl"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Book a Free Consultation
+              </motion.a>
+              <motion.a
+                href="/career"
+                className="px-10 py-4 border-2 border-white/30 text-white rounded-xl font-bold hover:bg-white/10 transition-colors"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View Open Positions
+              </motion.a>
+            </div>
+
+            {/* Social proof */}
+            <motion.div
+              className="mt-12 flex flex-wrap justify-center gap-8 text-white/60 text-sm"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                500+ enterprise clients
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                98% client retention rate
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Free initial consultation
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </motion.section>
     </div>

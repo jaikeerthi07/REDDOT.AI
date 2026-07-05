@@ -8,6 +8,13 @@
       "when": 1782819146024,
       "tag": "0000_useful_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1782848240144,
+      "tag": "0001_naive_risque",
+      "breakpoints": true
     }
   ]
 }

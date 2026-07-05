@@ -1,34 +1,38 @@
-import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Star } from "lucide-react";
 
 export default function Testimonials() {
   const testimonials = [
     {
-      quote: 'REDDOT transformed our business operations with their AI solutions. The results exceeded our expectations.',
-      author: 'Sarah Johnson',
-      role: 'CEO, TechCorp',
-      company: 'TechCorp',
+      quote:
+        "REDDOT transformed our business operations with their AI solutions. The results exceeded our expectations.",
+      author: "Sarah Johnson",
+      role: "CEO, TechCorp",
+      company: "TechCorp",
       rating: 5,
     },
     {
-      quote: 'Working with REDDOT was seamless. Their team understood our needs and delivered exceptional results.',
-      author: 'Michael Chen',
-      role: 'CTO, FinanceHub',
-      company: 'FinanceHub',
+      quote:
+        "Working with REDDOT was seamless. Their team understood our needs and delivered exceptional results.",
+      author: "Michael Chen",
+      role: "CTO, FinanceHub",
+      company: "FinanceHub",
       rating: 5,
     },
     {
-      quote: 'The AI automation platform has reduced our operational costs by 40%. Highly recommended!',
-      author: 'Emily Rodriguez',
-      role: 'Director of Operations, RetailCo',
-      company: 'RetailCo',
+      quote:
+        "The AI automation platform has reduced our operational costs by 40%. Highly recommended!",
+      author: "Emily Rodriguez",
+      role: "Director of Operations, RetailCo",
+      company: "RetailCo",
       rating: 5,
     },
     {
-      quote: 'REDDOT\'s expertise in machine learning is unmatched. They delivered exactly what we needed.',
-      author: 'David Park',
-      role: 'VP Engineering, HealthTech',
-      company: 'HealthTech',
+      quote:
+        "REDDOT's expertise in machine learning is unmatched. They delivered exactly what we needed.",
+      author: "David Park",
+      role: "VP Engineering, HealthTech",
+      company: "HealthTech",
       rating: 5,
     },
   ];
@@ -76,7 +80,8 @@ export default function Testimonials() {
             Trusted by Industry Leaders
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Hear from our satisfied clients about their experience working with REDDOT.
+            Hear from our satisfied clients about their experience working with
+            REDDOT.
           </p>
         </motion.div>
 
@@ -95,7 +100,7 @@ export default function Testimonials() {
               variants={itemVariants}
               whileHover={{
                 y: -4,
-                boxShadow: '0 15px 30px rgba(37, 99, 235, 0.1)',
+                boxShadow: "0 15px 30px rgba(37, 99, 235, 0.1)",
               }}
             >
               {/* Stars */}
@@ -116,7 +121,9 @@ export default function Testimonials() {
 
               {/* Author */}
               <div className="border-t border-slate-200 pt-4">
-                <p className="font-semibold text-foreground">{testimonial.author}</p>
+                <p className="font-semibold text-foreground">
+                  {testimonial.author}
+                </p>
                 <p className="text-sm text-slate-600">{testimonial.role}</p>
                 <p className="text-xs text-blue-600 font-semibold mt-1">
                   {testimonial.company}
@@ -135,12 +142,17 @@ export default function Testimonials() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           {[
-            { number: '500+', label: 'Happy Clients' },
-            { number: '98%', label: 'Satisfaction Rate' },
-            { number: '1000+', label: 'Projects Completed' },
+            { number: "500+", label: "Happy Clients" },
+            { number: "98%", label: "Satisfaction Rate" },
+            { number: "1000+", label: "Projects Completed" },
           ].map((stat, idx) => (
-            <div key={idx} className="text-center p-6 rounded-xl bg-white border border-slate-200">
-              <p className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</p>
+            <div
+              key={idx}
+              className="text-center p-6 rounded-xl bg-white border border-slate-200"
+            >
+              <p className="text-4xl font-bold text-blue-600 mb-2">
+                {stat.number}
+              </p>
               <p className="text-slate-600">{stat.label}</p>
             </div>
           ))}

@@ -167,6 +167,43 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    cssCodeSplit: true,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Core vendor chunk
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/scheduler')) {
+            return 'react-vendor';
+          }
+          // Animation chunk
+          if (id.includes('node_modules/framer-motion')) {
+            return 'framer-motion';
+          }
+          // UI library chunk
+          if (id.includes('node_modules/@radix-ui') || id.includes('node_modules/lucide-react')) {
+            return 'ui-vendor';
+          }
+          // Query/data chunk
+          if (id.includes('node_modules/@tanstack') || id.includes('node_modules/@trpc')) {
+            return 'query-vendor';
+          }
+          // Avatar/LiveKit chunk (heavy)
+          if (id.includes('node_modules/@livekit') || id.includes('node_modules/livekit')) {
+            return 'livekit-vendor';
+          }
+          // Date utilities
+          if (id.includes('node_modules/date-fns')) {
+            return 'date-vendor';
+          }
+        },
+        // Better asset naming for long-term caching
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+      },
+    },
   },
   server: {
     host: true,

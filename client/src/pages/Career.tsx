@@ -1,11 +1,127 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { MapPin, Briefcase, DollarSign, Users, ArrowRight, Star } from 'lucide-react';
+import { MapPin, Briefcase, DollarSign, ArrowRight, Star, X, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { trpc } from "@/lib/trpc";
+
+const fallbackJobs = [
+  {
+    id: 1,
+    title: 'AI Systems Engineer',
+    department: 'Engineering',
+    location: 'Bangalore, India',
+    type: 'Full-time',
+    salaryRange: '₹18L - ₹28L',
+    description: 'Build next-generation autonomous cognitive agent swarms using state-of-the-art LLMs, RAG frameworks, and live-sync audio/video APIs.',
+    requirements: ['2+ years AI engineering experience', 'Python & TypeScript', 'LangChain/LlamaIndex', 'Familiarity with vector DBs'],
+  },
+  {
+    id: 2,
+    title: 'Machine Learning Engineer',
+    department: 'Engineering',
+    location: 'Chennai, India',
+    type: 'Full-time',
+    salaryRange: '₹15L - ₹24L',
+    description: 'Design, fine-tune, and deploy custom domain-specific language models and computer vision pipelines.',
+    requirements: ['PyTorch/TensorFlow expertise', 'Fine-tuning & quantization (LoRA/QLoRA)', 'Model pruning & edge deployment', 'Degree in CS/Math'],
+  },
+  {
+    id: 3,
+    title: 'Full Stack Developer',
+    department: 'Engineering',
+    location: 'Remote (India)',
+    type: 'Full-time',
+    salaryRange: '₹12L - ₹20L',
+    description: 'Develop responsive, multi-tenant cloud-native SaaS systems with ultra-low latency API architectures.',
+    requirements: ['React, Next.js, & Node.js', 'PostgreSQL & Drizzle ORM', 'WebSocket / SSE implementation', '3+ years experience'],
+  },
+  {
+    id: 4,
+    title: 'Website Developer',
+    department: 'Engineering',
+    location: 'Chennai, India',
+    type: 'Full-time',
+    salaryRange: '₹8L - ₹14L',
+    description: 'Craft blazing-fast, accessible, and interactive user-facing web portals and high-end landing pages.',
+    requirements: ['Advanced HTML/CSS/Tailwind', 'React & Vite', 'Framer Motion & animations', 'SEO best practices'],
+  },
+  {
+    id: 5,
+    title: 'Cybersecurity Specialist',
+    department: 'Infrastructure',
+    location: 'Bangalore, India',
+    type: 'Full-time',
+    salaryRange: '₹14L - ₹22L',
+    description: 'Protect enterprise topologies, conduct penetration testing audits, and implement zero-trust network boundaries.',
+    requirements: ['Zero-trust network architectures', 'Penetration testing and security audits', 'Threat modeling and firewall routing', 'Relevant certifications (CEH, OSCP)'],
+  },
+  {
+    id: 6,
+    title: 'Content Creator & Strategist',
+    department: 'Product',
+    location: 'Remote (India)',
+    type: 'Full-time',
+    salaryRange: '₹6L - ₹10L',
+    description: 'Create high-impact technical blog posts, videos, and documentation detailing REDDOT\'s products and AI capabilities.',
+    requirements: ['Excellent technical writing skills', 'Familiarity with AI/ML concepts', 'Social media strategy', 'Design tools (Figma/Canva)'],
+  },
+];
 
 export default function Career() {
   const [selectedJob, setSelectedJob] = useState<number | null>(null);
   const [departmentFilter, setDepartmentFilter] = useState<string>('all');
+
+  const { data: dbJobs } = trpc.career.getJobs.useQuery();
+  const applyMutation = trpc.career.submitApplication.useMutation();
+
+  const jobs = (dbJobs || fallbackJobs).map(j => ({
+    id: j.id,
+    title: j.title,
+    department: j.department,
+    location: j.location,
+    type: j.type,
+    salary: j.salaryRange || '',
+    description: j.description,
+    requirements: j.requirements,
+  })).filter(j => j.type.toLowerCase() === 'full-time');
+
+  const [applyingToJob, setApplyingToJob] = useState<typeof jobs[0] | null>(null);
+
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<{
+    applicantName: string;
+    email: string;
+    phone: string;
+    linkedinUrl: string;
+    resumeUrl: string;
+  }>();
+
+  const handleApplySubmit = async (data: any) => {
+    if (!applyingToJob) return;
+    applyMutation.mutate({
+      jobId: applyingToJob.id,
+      applicantName: data.applicantName,
+      email: data.email,
+      phone: data.phone || undefined,
+      linkedinUrl: data.linkedinUrl || undefined,
+      resumeUrl: data.resumeUrl || undefined,
+    }, {
+      onSuccess: (res) => {
+        toast.success('Application submitted!', {
+          description: res.message,
+          duration: 5000,
+        });
+        reset();
+        setApplyingToJob(null);
+      },
+      onError: (err) => {
+        toast.error('Submission failed', {
+          description: err.message || 'Please try again later.'
+        });
+      }
+    });
+  };
 
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -14,69 +130,6 @@ export default function Career() {
   });
 
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -150]);
-
-  const jobs = [
-    {
-      id: 1,
-      title: 'Senior AI/ML Engineer',
-      department: 'Engineering',
-      location: 'San Francisco, CA',
-      type: 'Full-time',
-      salary: '$180K - $220K',
-      description: 'Lead the development of cutting-edge AI and machine learning solutions.',
-      requirements: ['5+ years ML experience', 'Python expertise', 'TensorFlow/PyTorch', 'Team leadership'],
-    },
-    {
-      id: 2,
-      title: 'Full Stack Engineer',
-      department: 'Engineering',
-      location: 'Remote',
-      type: 'Full-time',
-      salary: '$150K - $190K',
-      description: 'Build scalable web applications and cloud infrastructure.',
-      requirements: ['React/Node.js', 'Cloud platforms', 'Database design', '3+ years experience'],
-    },
-    {
-      id: 3,
-      title: 'Product Manager',
-      department: 'Product',
-      location: 'San Francisco, CA',
-      type: 'Full-time',
-      salary: '$160K - $200K',
-      description: 'Drive product strategy and vision for our AI platform.',
-      requirements: ['Product management experience', 'AI/ML knowledge', 'Analytics', 'Leadership'],
-    },
-    {
-      id: 4,
-      title: 'DevOps Engineer',
-      department: 'Infrastructure',
-      location: 'Remote',
-      type: 'Full-time',
-      salary: '$140K - $180K',
-      description: 'Build and maintain our cloud infrastructure and deployment systems.',
-      requirements: ['Kubernetes', 'AWS/GCP', 'CI/CD', 'Infrastructure as Code'],
-    },
-    {
-      id: 5,
-      title: 'Data Scientist',
-      department: 'Research',
-      location: 'San Francisco, CA',
-      type: 'Full-time',
-      salary: '$170K - $210K',
-      description: 'Conduct research on advanced AI algorithms and techniques.',
-      requirements: ['PhD or equivalent', 'Research publications', 'Deep learning', 'Statistical analysis'],
-    },
-    {
-      id: 6,
-      title: 'Solutions Architect',
-      department: 'Sales',
-      location: 'Remote',
-      type: 'Full-time',
-      salary: '$155K - $195K',
-      description: 'Design custom solutions for enterprise clients.',
-      requirements: ['Enterprise sales experience', 'Technical expertise', 'Client management', 'Presentation skills'],
-    },
-  ];
 
   const departments = ['all', 'Engineering', 'Product', 'Infrastructure', 'Research', 'Sales'];
 
@@ -121,7 +174,7 @@ export default function Career() {
               repeat: Infinity,
               ease: 'easeInOut' as any,
             }}
-          />
+           style={{ willChange: 'transform, opacity' }} />
           <motion.div
             className="absolute bottom-0 right-1/3 w-96 h-96 bg-purple-400 rounded-full blur-3xl opacity-20"
             animate={{
@@ -133,7 +186,7 @@ export default function Career() {
               repeat: Infinity,
               ease: 'easeInOut' as any,
             }}
-          />
+           style={{ willChange: 'transform, opacity' }} />
         </div>
 
         {/* Hero Content */}
@@ -171,7 +224,7 @@ export default function Career() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Join a team of innovators, engineers, and visionaries working on cutting-edge AI solutions that impact millions.
+            Founded in 2026, REDDOT is a pioneering AI engineering startup. Join our fast-growing team of builders in India working on next-generation intelligence products.
           </motion.p>
 
           {/* Floating Scroll Indicator */}
@@ -206,8 +259,10 @@ export default function Career() {
               className="relative h-96 rounded-2xl overflow-hidden"
             >
               <img
-                src="/manus-storage/hero-team-collaboration_69278f24.jpg"
-                alt="Team collaboration"
+                src="/images/reddot-lab.png"
+                alt="REDDOT AI team collaboration"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent" />
@@ -217,8 +272,8 @@ export default function Career() {
                 className="absolute top-6 right-6 bg-white/95 backdrop-blur-md rounded-full px-4 py-2 shadow-xl"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
-              >
-                <p className="text-sm font-semibold text-blue-600">50+ Team Members</p>
+               style={{ willChange: 'transform, opacity' }} >
+                <p className="text-sm font-semibold text-blue-600">Active Indian Startup</p>
               </motion.div>
             </motion.div>
 
@@ -313,9 +368,9 @@ export default function Career() {
             ))}
           </motion.div>
 
-          {/* Job Cards Grid */}
+          {/* Job List (VDart Style) */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="flex flex-col gap-4 max-w-5xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -324,78 +379,111 @@ export default function Career() {
             {filteredJobs.map((job) => (
               <motion.div
                 key={job.id}
-                className="group relative h-full rounded-2xl overflow-hidden cursor-pointer"
+                className="group relative rounded-xl border border-slate-200 bg-white hover:border-blue-500 hover:shadow-lg transition-all duration-300 overflow-hidden"
                 variants={itemVariants}
-                onClick={() => setSelectedJob(selectedJob === job.id ? null : job.id)}
-                whileHover={{ y: -8 }}
               >
-                {/* Card Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                {/* Card Content */}
-                <div className="relative h-full p-8 border border-slate-200 rounded-2xl bg-white group-hover:border-blue-500 transition-all duration-300 flex flex-col">
-                  {/* Header */}
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-blue-600 transition-colors">
+                {/* Main Row */}
+                <div 
+                  className="flex flex-col md:flex-row md:items-center justify-between p-6 cursor-pointer"
+                  onClick={() => setSelectedJob(selectedJob === job.id ? null : job.id)}
+                >
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-blue-600 transition-colors">
                       {job.title}
                     </h3>
-                    <p className="text-sm text-blue-600 font-semibold">{job.department}</p>
-                  </div>
-
-                  {/* Job Details */}
-                  <div className="space-y-2 mb-6 flex-1">
-                    <div className="flex items-center gap-2 text-slate-600 text-sm">
-                      <MapPin size={16} />
-                      {job.location}
-                    </div>
-                    <div className="flex items-center gap-2 text-slate-600 text-sm">
-                      <Briefcase size={16} />
-                      {job.type}
-                    </div>
-                    <div className="flex items-center gap-2 text-slate-600 text-sm">
-                      <DollarSign size={16} />
-                      {job.salary}
+                    <div className="flex flex-wrap items-center gap-4 text-slate-600 text-sm">
+                      <span className="flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                        <Briefcase size={14} /> {job.department}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <MapPin size={14} className="text-slate-400" /> {job.location}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <DollarSign size={14} className="text-slate-400" /> {job.salary}
+                      </span>
                     </div>
                   </div>
-
-                  <p className="text-slate-600 text-sm mb-6">
-                    {job.description}
-                  </p>
-
-                  {/* Expandable Requirements */}
-                  {selectedJob === job.id && (
-                    <motion.div
-                      className="border-t border-slate-200 pt-6 mt-6"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      transition={{ duration: 0.3 }}
+                  <div className="mt-5 md:mt-0 flex items-center gap-4">
+                    <Button
+                      className="bg-blue-600 text-white hover:bg-blue-700 rounded-lg px-8 py-5 text-md font-semibold shadow-md hover:shadow-xl transition-all"
+                      onClick={(e) => { e.stopPropagation(); setApplyingToJob(job); setSelectedJob(null); }}
                     >
-                      <p className="font-semibold text-foreground mb-3">Requirements:</p>
-                      <ul className="space-y-2 mb-6">
+                      Apply Now
+                    </Button>
+                    <div className={`p-2 rounded-full transition-transform duration-300 hidden md:block ${selectedJob === job.id ? 'rotate-90 bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600'}`}>
+                      <ArrowRight className="w-5 h-5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expandable Details */}
+                {selectedJob === job.id && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="border-t border-slate-100 bg-slate-50 p-6 md:p-8"
+                  >
+                    <div className="max-w-3xl">
+                      <h4 className="font-semibold text-foreground mb-3 text-lg">Job Description</h4>
+                      <p className="text-slate-600 text-base mb-8 leading-relaxed">
+                        {job.description}
+                      </p>
+                      
+                      <h4 className="font-semibold text-foreground mb-4 text-lg">Requirements</h4>
+                      <ul className="space-y-3">
                         {job.requirements.map((req, idx) => (
-                          <li key={idx} className="text-sm text-slate-600 flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                            {req}
+                          <li key={idx} className="text-base text-slate-600 flex items-start gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
+                            <span>{req}</span>
                           </li>
                         ))}
                       </ul>
-                      <Button className="w-full bg-blue-600 text-white hover:bg-blue-700 rounded-lg">
-                        Apply Now
-                      </Button>
-                    </motion.div>
-                  )}
-
-                  {/* Arrow Indicator */}
-                  <motion.div
-                    className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-6 right-6"
-                    animate={{ x: selectedJob === job.id ? 0 : -5 }}
-                  >
-                    <ArrowRight className="w-5 h-5 text-blue-600" />
+                    </div>
                   </motion.div>
-                </div>
+                )}
               </motion.div>
             ))}
+            {filteredJobs.length === 0 && (
+              <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+                <div className="text-4xl mb-4">📭</div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">No Open Full-Time Positions</h3>
+                <p className="text-slate-600">We are not currently hiring for full-time roles. Please check out our Internship Programs below!</p>
+              </div>
+            )}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Internship Promo Section */}
+      <section className="py-24 bg-gradient-to-b from-background to-slate-50 relative overflow-hidden">
+        <div className="container relative z-10">
+          <div className="bg-indigo-600 rounded-3xl p-8 md:p-16 relative overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-10">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500 rounded-full blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2" />
+            
+            <div className="flex-1 text-center md:text-left relative z-10 max-w-2xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Are you a student or recent graduate?</h2>
+              <p className="text-indigo-100 text-lg mb-8 leading-relaxed">
+                Launch your career in AI with our exclusive internship programs. Work on cutting-edge systems, get mentored by top engineers, and make a real impact.
+              </p>
+              <Button
+                variant="secondary"
+                className="bg-white text-indigo-600 hover:bg-indigo-50 border-none font-bold text-lg px-8 py-6 rounded-xl shadow-lg"
+                onClick={() => window.location.href = '/internship'}
+              >
+                View Internship Programs
+              </Button>
+            </div>
+            
+            <div className="hidden md:flex relative z-10">
+              <div className="w-48 h-48 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20">
+                <div className="text-5xl">🚀</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -425,14 +513,14 @@ export default function Career() {
             viewport={{ once: true }}
           >
             {[
-              { title: 'Health Insurance', desc: 'Comprehensive medical, dental, and vision coverage', icon: '🏥' },
-              { title: '401(k) Match', desc: '4% employer 401(k) matching', icon: '💰' },
-              { title: 'Flexible Work', desc: 'Remote-first with flexible hours', icon: '🏠' },
-              { title: 'Learning Budget', desc: '$5,000 annual professional development', icon: '📚' },
-              { title: 'Equity', desc: 'Stock options for all employees', icon: '📈' },
-              { title: 'Unlimited PTO', desc: 'Flexible time off policy', icon: '✈️' },
-              { title: 'Home Office', desc: '$2,000 home office setup stipend', icon: '🖥️' },
-              { title: 'Team Events', desc: 'Regular team outings and celebrations', icon: '🎉' },
+              { title: 'Health Insurance', desc: 'Top-tier medical cover for you and your family', icon: '🏥' },
+              { title: 'EPF & Bonuses', desc: 'Provident fund contributions and yearly bonuses', icon: '💰' },
+              { title: 'Flexible Work', desc: 'Hybrid/remote-first with flexible working hours', icon: '🏠' },
+              { title: 'Learning Stipend', desc: 'Subsidies for AI/ML certifications and courses', icon: '📚' },
+              { title: 'Equity Options', desc: 'Stock options for early stage team members', icon: '📈' },
+              { title: 'Unlimited PTO', desc: 'Flexible time off and wellness leave policy', icon: '✈️' },
+              { title: 'Workspace Setup', desc: 'Allowance for ergonomic chairs and desks', icon: '🖥️' },
+              { title: 'Team Outings', desc: 'Regular team dinners and engineering offsites', icon: '🎉' },
             ].map((benefit, idx) => (
               <motion.div
                 key={idx}
@@ -498,6 +586,182 @@ export default function Career() {
           </motion.div>
         </div>
       </section>
+
+      {/* Job Application Modal */}
+      {applyingToJob && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {/* Backdrop */}
+          <motion.div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setApplyingToJob(null)}
+            style={{ willChange: 'transform, opacity' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          />
+
+          {/* Modal */}
+          <motion.div
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between rounded-t-2xl z-10">
+              <div>
+                <h3 className="text-2xl font-bold text-foreground">Apply for Position</h3>
+                <p className="text-blue-600 font-semibold text-sm">{applyingToJob.title} · {applyingToJob.department}</p>
+              </div>
+              <motion.button
+                onClick={() => setApplyingToJob(null)}
+                className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <X className="w-5 h-5 text-slate-500" />
+              </motion.button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit(handleApplySubmit)} className="p-6 space-y-5">
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register('applicantName', { required: 'Full name is required' })}
+                  type="text"
+                  placeholder="John Smith"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-foreground"
+                />
+                {errors.applicantName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.applicantName.message}</p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Invalid email address' },
+                  })}
+                  type="email"
+                  placeholder="john@company.com"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-foreground"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
+              </div>
+
+              {/* Phone & LinkedIn */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-foreground mb-2">Phone</label>
+                  <input
+                    {...register('phone')}
+                    type="tel"
+                    placeholder="+1 (555) 000-0000"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-foreground mb-2">LinkedIn Profile</label>
+                  <input
+                    {...register('linkedinUrl')}
+                    type="url"
+                    placeholder="linkedin.com/in/username"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-foreground"
+                  />
+                </div>
+              </div>
+
+              {/* Resume Upload */}
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">
+                  Resume (PDF, DOCX) <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    title="Upload Resume"
+                    accept=".pdf,.doc,.docx"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          const base64 = reader.result as string;
+                          // insert filename into the data URL
+                          const withName = base64.replace('data:', `data:${file.type};name=${file.name};`);
+                          setValue('resumeUrl', withName);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  {/* Register the hidden field so react-hook-form tracks it for required validation */}
+                  <input type="hidden" {...register('resumeUrl', { required: 'Resume is required' })} />
+                </div>
+                {errors.resumeUrl && (
+                  <p className="text-red-500 text-xs mt-1">{errors.resumeUrl.message}</p>
+                )}
+              </div>
+
+              {/* Job Details reminder */}
+              <div className="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                <p className="text-xs font-semibold text-blue-700 mb-2 uppercase tracking-wide">Applying for</p>
+                <p className="font-bold text-foreground">{applyingToJob.title}</p>
+                <div className="flex gap-4 mt-1 text-sm text-slate-600">
+                  <span>📍 {applyingToJob.location}</span>
+                  <span>💼 {applyingToJob.type}</span>
+                  <span>💰 {applyingToJob.salary}</span>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <div className="flex gap-3 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setApplyingToJob(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  disabled={applyMutation.isPending}
+                >
+                  {applyMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      Submit Application
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }

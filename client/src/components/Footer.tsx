@@ -1,42 +1,74 @@
-import { motion } from 'framer-motion';
-import { Mail, MapPin, Phone, Linkedin, Twitter, Github } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { memo } from "react";
+import { motion } from "framer-motion";
+import { Mail, MapPin, Phone, Linkedin, Twitter, Github } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-export default function Footer() {
+const Footer = memo(function Footer() {
   const currentYear = new Date().getFullYear();
 
   const footerSections = [
     {
-      title: 'Products',
-      links: ['AI Agents', 'Enterprise Software', 'Cloud Solutions', 'Analytics Platform'],
+      title: "Products",
+      links: [
+        { label: "AI Agents", href: "/#services" },
+        { label: "Enterprise Software", href: "/#services" },
+        { label: "Cloud Solutions", href: "/#services" },
+        { label: "Analytics Platform", href: "/#services" },
+      ],
     },
     {
-      title: 'Solutions',
-      links: ['Machine Learning', 'Automation', 'Data Analytics', 'Digital Transformation'],
+      title: "Solutions",
+      links: [
+        { label: "Machine Learning", href: "/#services" },
+        { label: "Automation", href: "/#services" },
+        { label: "Data Analytics", href: "/#services" },
+        { label: "Digital Transformation", href: "/#services" },
+      ],
     },
     {
-      title: 'Industries',
-      links: ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Government'],
+      title: "Industries",
+      links: [
+        { label: "Healthcare", href: "/#industries" },
+        { label: "Finance", href: "/#industries" },
+        { label: "Manufacturing", href: "/#industries" },
+        { label: "Retail", href: "/#industries" },
+        { label: "Government", href: "/#industries" },
+      ],
     },
     {
-      title: 'Resources',
-      links: ['Documentation', 'API Reference', 'Blog', 'Case Studies'],
+      title: "Resources",
+      links: [
+        { label: "Documentation", href: "#" },
+        { label: "API Reference", href: "#" },
+        { label: "Blog", href: "/blog" },
+        { label: "Case Studies", href: "/#case-studies" },
+      ],
     },
     {
-      title: 'Company',
-      links: ['About Us', 'Careers', 'Press', 'Contact'],
+      title: "Company",
+      links: [
+        { label: "About Us", href: "/#about" },
+        { label: "Careers", href: "/career" },
+        { label: "Press", href: "#" },
+        { label: "Contact", href: "/contact" },
+      ],
     },
     {
-      title: 'Legal',
-      links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Security'],
+      title: "Legal",
+      links: [
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms of Service", href: "/terms" },
+        { label: "Cookie Policy", href: "/cookies" },
+        { label: "Security", href: "#" },
+      ],
     },
   ];
 
   const socialLinks = [
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Github, href: '#', label: 'GitHub' },
+    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Github, href: "#", label: "GitHub" },
   ];
 
   const containerVariants = {
@@ -104,24 +136,56 @@ export default function Footer() {
             viewport={{ once: true }}
           >
             <motion.div variants={itemVariants}>
-              <h2 className="text-3xl font-bold text-gradient mb-4">REDDOT</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <img
+                  src="/images/reddot-logo-navbar.png"
+                  alt="REDDOT Logo"
+                  width={72}
+                  height={72}
+                  className="h-16 w-16 sm:h-[72px] sm:w-[72px] object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="text-4xl font-extrabold text-gradient tracking-tight">
+                  REDDOT
+                </span>
+              </div>
               <p className="text-foreground-tertiary leading-relaxed mb-6">
-                Engineering Intelligence for the Future. Building AI Systems, Enterprise Software, and Smart Technologies for businesses worldwide.
+                Engineering Intelligence for the Future. Building AI Systems,
+                Enterprise Software, and Smart Technologies for businesses
+                worldwide.
               </p>
 
               {/* Contact Info */}
               <div className="space-y-3">
-                <div className="flex items-center gap-3 text-foreground-tertiary hover:text-foreground transition-colors">
-                  <Mail size={18} />
-                  <a href="mailto:hello@reddot.ai">hello@reddot.ai</a>
+                <div className="flex flex-col gap-2 text-foreground-tertiary">
+                  <div className="flex items-center gap-3 hover:text-foreground transition-colors">
+                    <Mail size={18} className="flex-shrink-0" />
+                    <a href="mailto:jaikeerthi156@gmail.com">
+                      jaikeerthi156@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3 hover:text-foreground transition-colors pl-7">
+                    <a href="mailto:jagadish2k2006@gmail.com">
+                      jagadish2k2006@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3 hover:text-foreground transition-colors pl-7">
+                    <a href="mailto:reddot123@gmail.com">reddot123@gmail.com</a>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-foreground-tertiary hover:text-foreground transition-colors">
-                  <Phone size={18} />
-                  <a href="tel:+1234567890">+1 (234) 567-890</a>
+                <div className="flex flex-col gap-2 text-foreground-tertiary mt-3">
+                  <div className="flex items-center gap-3 hover:text-foreground transition-colors">
+                    <Phone size={18} className="flex-shrink-0" />
+                    <a href="tel:+918015024729">+91 80150 24729</a>
+                  </div>
+                  <div className="flex items-center gap-3 hover:text-foreground transition-colors pl-7">
+                    <a href="tel:+918072163133">+91 80721 63133</a>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-foreground-tertiary hover:text-foreground transition-colors">
-                  <MapPin size={18} />
-                  <span>San Francisco, CA</span>
+                <div className="flex items-center gap-3 text-foreground-tertiary hover:text-foreground transition-colors mt-3">
+                  <MapPin size={18} className="flex-shrink-0" />
+                  <span>Chennai, India</span>
                 </div>
               </div>
             </motion.div>
@@ -132,9 +196,11 @@ export default function Footer() {
               variants={itemVariants}
             >
               <div>
-                <h4 className="font-semibold text-foreground mb-4">Connect With Us</h4>
+                <h4 className="font-semibold text-foreground mb-4">
+                  Connect With Us
+                </h4>
                 <div className="flex gap-4">
-                  {socialLinks.map((social) => {
+                  {socialLinks.map(social => {
                     const Icon = social.icon;
                     return (
                       <motion.a
@@ -144,7 +210,10 @@ export default function Footer() {
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <Icon size={20} className="text-foreground-tertiary hover:text-accent-primary transition-colors" />
+                        <Icon
+                          size={20}
+                          className="text-foreground-tertiary hover:text-accent-primary transition-colors"
+                        />
                       </motion.a>
                     );
                   })}
@@ -154,12 +223,14 @@ export default function Footer() {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { number: '500+', label: 'Clients' },
-                  { number: '50+', label: 'Team Members' },
-                  { number: '100+', label: 'Projects' },
-                ].map((stat) => (
+                  { number: "2026", label: "Est. Year" },
+                  { number: "12+", label: "Sectors Served" },
+                  { number: "100%", label: "Commitment" },
+                ].map(stat => (
                   <div key={stat.label} className="text-center">
-                    <p className="text-2xl font-bold text-gradient">{stat.number}</p>
+                    <p className="text-2xl font-bold text-gradient">
+                      {stat.number}
+                    </p>
                     <p className="text-xs text-slate-500">{stat.label}</p>
                   </div>
                 ))}
@@ -175,17 +246,19 @@ export default function Footer() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {footerSections.map((section) => (
+            {footerSections.map(section => (
               <motion.div key={section.title} variants={itemVariants}>
-                <h4 className="font-semibold text-foreground mb-4">{section.title}</h4>
+                <h4 className="font-semibold text-foreground mb-4">
+                  {section.title}
+                </h4>
                 <ul className="space-y-2">
-                  {section.links.map((link) => (
-                    <li key={link}>
+                  {section.links.map(link => (
+                    <li key={link.label}>
                       <a
-                        href="#"
+                        href={link.href}
                         className="text-slate-500 hover:text-slate-900 transition-colors text-sm"
                       >
-                        {link}
+                        {link.label}
                       </a>
                     </li>
                   ))}
@@ -241,10 +314,13 @@ export default function Footer() {
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: 'easeInOut',
+            ease: "easeInOut",
           }}
+          style={{ willChange: "transform, opacity" }}
         />
       </div>
     </footer>
   );
-}
+});
+
+export default Footer;

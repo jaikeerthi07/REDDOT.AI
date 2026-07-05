@@ -1,71 +1,140 @@
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, MessageCircle, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useState, useRef } from 'react';
-import { useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  MessageCircle,
+  Send,
+  Loader2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useState, useRef } from "react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    service: "AI/ML Development",
+    budget: "under-50,000",
+    timeline: "1 to 3 Months",
+    requirements: "",
   });
+
+  const formRef = useRef<HTMLFormElement>(null);
+  const contactMutation = trpc.contact.submit.useMutation();
 
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end center'],
+    offset: ["start start", "end center"],
   });
 
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0.8]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+
+    // Map Google Form entry names to state keys
+    let key = name;
+    if (name === "entry.37726783") key = "name";
+    else if (name === "entry.279976118") key = "email";
+    else if (name === "entry.338811961") key = "phone";
+    else if (name === "entry.217308409") key = "service";
+    else if (name === "entry.994001715") key = "budget";
+    else if (name === "entry.2032630066") key = "requirements";
+
+    setFormData(prev => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', company: '', message: '' });
+
+    const formDataToSend = new URLSearchParams();
+    formDataToSend.append("entry.37726783", formData.name);
+    formDataToSend.append("entry.279976118", formData.email);
+    formDataToSend.append("entry.338811961", formData.phone);
+    formDataToSend.append("entry.217308409", formData.service);
+    formDataToSend.append("entry.994001715", formData.budget);
+    formDataToSend.append(
+      "entry.2032630066",
+      `Project Duration & Timeline: ${formData.timeline}\nOpinions & Project Requirements:\n${formData.requirements}`
+    );
+
+    fetch(
+      "https://docs.google.com/forms/d/e/1FAIpQLSd9xzigYIo05fAFYmueoGpA7HVEOzYdqGEvghj9RunqFHFZcg/formResponse",
+      {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formDataToSend.toString(),
+      }
+    )
+      .then(() => {
+        toast.success("Message Sent!", {
+          description: "Your details have been successfully submitted.",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          service: "AI/ML Development",
+          budget: "under-50,000",
+          timeline: "1 to 3 Months",
+          requirements: "",
+        });
+      })
+      .catch(() => {
+        toast.error("Failed to send message", {
+          description: "Please try again later.",
+        });
+      });
   };
 
   const contactMethods = [
     {
       icon: Mail,
-      title: 'Email',
-      description: 'Send us an email anytime',
-      contact: 'hello@reddot.ai',
-      link: 'mailto:hello@reddot.ai',
-      color: 'from-blue-600 to-blue-400',
+      title: "Email",
+      description: "Founders & Support",
+      contact:
+        "jaikeerthi156@gmail.com\njagadish2k2006@gmail.com\nreddot123@gmail.com",
+      link: "mailto:reddot123@gmail.com",
+      color: "from-blue-600 to-blue-400",
     },
     {
       icon: Phone,
-      title: 'Phone',
-      description: 'Call us during business hours',
-      contact: '+1 (555) 123-4567',
-      link: 'tel:+15551234567',
-      color: 'from-purple-600 to-purple-400',
+      title: "Phone",
+      description: "Call us during business hours",
+      contact: "+91 80150 24729\n+91 80721 63133",
+      link: "tel:+918015024729",
+      color: "from-purple-600 to-purple-400",
     },
     {
       icon: MessageCircle,
-      title: 'WhatsApp',
-      description: 'Chat with us on WhatsApp',
-      contact: '+1 (555) 123-4567',
-      link: 'https://wa.me/15551234567',
-      color: 'from-green-600 to-green-400',
+      title: "WhatsApp",
+      description: "Chat with us on WhatsApp",
+      contact: "+91 80150 24729\n+91 80721 63133",
+      link: "https://wa.me/918015024729",
+      color: "from-green-600 to-green-400",
     },
     {
       icon: MapPin,
-      title: 'Office',
-      description: 'Visit us in person',
-      contact: 'San Francisco, CA',
-      link: '#',
-      color: 'from-red-600 to-red-400',
+      title: "Office",
+      description: "Visit us in person",
+      contact: "Chennai, India",
+      link: "#",
+      color: "from-red-600 to-red-400",
     },
   ];
 
@@ -85,7 +154,7 @@ export default function Contact() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' as any },
+      transition: { duration: 0.8, ease: "easeOut" as any },
     },
   };
 
@@ -104,8 +173,9 @@ export default function Contact() {
             transition={{
               duration: 15,
               repeat: Infinity,
-              ease: 'easeInOut' as any,
+              ease: "easeInOut" as any,
             }}
+            style={{ willChange: "transform, opacity" }}
           />
           <motion.div
             className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400 rounded-full blur-3xl opacity-20"
@@ -116,8 +186,9 @@ export default function Contact() {
             transition={{
               duration: 18,
               repeat: Infinity,
-              ease: 'easeInOut' as any,
+              ease: "easeInOut" as any,
             }}
+            style={{ willChange: "transform, opacity" }}
           />
           <motion.div
             className="absolute top-1/2 right-0 w-96 h-96 bg-cyan-400 rounded-full blur-3xl opacity-10"
@@ -128,8 +199,9 @@ export default function Contact() {
             transition={{
               duration: 20,
               repeat: Infinity,
-              ease: 'easeInOut' as any,
+              ease: "easeInOut" as any,
             }}
+            style={{ willChange: "transform, opacity" }}
           />
         </div>
 
@@ -168,7 +240,8 @@ export default function Contact() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Have a question or ready to start your next project? We'd love to hear from you and discuss how we can help transform your business.
+            Have a question or ready to start your next project? We'd love to
+            hear from you and discuss how we can help transform your business.
           </motion.p>
 
           {/* Floating Scroll Indicator */}
@@ -227,7 +300,9 @@ export default function Contact() {
                   whileTap={{ scale: 0.95 }}
                 >
                   {/* Background Gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${method.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${method.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                  />
 
                   {/* Card Content */}
                   <div className="relative h-full p-8 border border-slate-200 rounded-2xl bg-white group-hover:border-transparent transition-all duration-500 flex flex-col justify-between">
@@ -248,7 +323,7 @@ export default function Contact() {
                       <p className="text-sm text-slate-600 group-hover:text-white/80 transition-colors mb-3">
                         {method.description}
                       </p>
-                      <p className="text-lg font-semibold text-blue-600 group-hover:text-white transition-colors">
+                      <p className="text-sm font-semibold text-blue-600 group-hover:text-white transition-colors whitespace-pre-line">
                         {method.contact}
                       </p>
                     </div>
@@ -272,14 +347,13 @@ export default function Contact() {
       {/* Contact Form Section with Image */}
       <section className="py-24 bg-background-secondary relative overflow-hidden">
         {/* Background Image with Parallax */}
-        <motion.div
-          className="absolute inset-0 -z-10"
-          style={{ y: parallaxY }}
-        >
+        <motion.div className="absolute inset-0 -z-10" style={{ y: parallaxY }}>
           <div className="absolute inset-0 bg-gradient-to-r from-background-secondary via-transparent to-background-secondary" />
           <img
-            src="/manus-storage/office-workspace-modern_6bd09c07.jpg"
-            alt="Modern office workspace"
+            src="/images/hero-bg.webp"
+            alt="AI infrastructure workspace"
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover opacity-30"
           />
         </motion.div>
@@ -297,83 +371,206 @@ export default function Contact() {
                 Send us a Message
               </h2>
               <p className="text-slate-600 mb-8">
-                Fill out the form below and we'll get back to you within 24 hours.
+                Fill out the form below and we'll get back to you within 24
+                hours.
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    Full Name
-                  </label>
-                  <Input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="John Doe"
-                    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
-                    required
-                  />
-                </motion.div>
+              <form
+                ref={formRef}
+                action="https://docs.google.com/forms/d/e/1FAIpQLSd9xzigYIo05fAFYmueoGpA7HVEOzYdqGEvghj9RunqFHFZcg/formResponse"
+                method="POST"
+                target="hidden_iframe"
+                onSubmit={handleSubmit}
+                className="space-y-6"
+              >
+                {/* Full Name & Email Address (Side by Side on medium screens) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                  >
+                    <label className="block text-sm font-semibold text-foreground mb-2">
+                      Full Name
+                    </label>
+                    <Input
+                      type="text"
+                      name="entry.37726783"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="John Doe"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
+                      required
+                    />
+                  </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.15 }}
-                >
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    Email Address
-                  </label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="john@company.com"
-                    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
-                    required
-                  />
-                </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                  >
+                    <label className="block text-sm font-semibold text-foreground mb-2">
+                      Email Address
+                    </label>
+                    <Input
+                      type="email"
+                      name="entry.279976118"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="john@company.com"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
+                      required
+                    />
+                  </motion.div>
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  <label className="block text-sm font-semibold text-foreground mb-2">
-                    Company
-                  </label>
-                  <Input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    placeholder="Your Company"
-                    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
-                  />
-                </motion.div>
+                {/* Phone Number & Type of Service (Side by Side on medium screens) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    <label className="block text-sm font-semibold text-foreground mb-2">
+                      Phone Number
+                    </label>
+                    <Input
+                      type="tel"
+                      name="entry.338811961"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+1 (555) 000-0000"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
+                    />
+                  </motion.div>
 
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.22 }}
+                  >
+                    <label
+                      htmlFor="service-needed"
+                      className="block text-sm font-semibold text-foreground mb-2"
+                    >
+                      Type of Service Needed
+                    </label>
+                    <select
+                      id="service-needed"
+                      name="entry.217308409"
+                      title="Type of Service Needed"
+                      value={formData.service}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-background transition-all text-foreground text-sm font-medium"
+                    >
+                      <option value="AI/ML Development">
+                        AI/ML Development
+                      </option>
+                      <option value="Web Development">Web Development</option>
+                      <option value="Cybersecurity Solutions">
+                        Cybersecurity Solutions
+                      </option>
+                      <option value="Embedded Systems & IoT">
+                        Embedded Systems & IoT
+                      </option>
+                      <option value="VLSI Design">VLSI Design</option>
+                      <option value="SEM System Deployment">
+                        SEM System Deployment
+                      </option>
+                      <option value="Other Services">Other Services</option>
+                    </select>
+                  </motion.div>
+                </div>
+
+                {/* Cost (Budget) & Duration/Timeline (Side by Side on medium screens) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.24 }}
+                  >
+                    <label
+                      htmlFor="project-budget"
+                      className="block text-sm font-semibold text-foreground mb-2"
+                    >
+                      Estimated Budget (Cost)
+                    </label>
+                    <select
+                      id="project-budget"
+                      name="entry.994001715"
+                      title="Estimated Budget"
+                      value={formData.budget}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-background transition-all text-foreground text-sm font-medium"
+                    >
+                      <option value="under-50,000">Under ₹50,000</option>
+                      <option value="₹50,000 - ₹2 Lakhs">
+                        ₹50,000 - ₹2 Lakhs
+                      </option>
+                      <option value="₹2 Lakhs - ₹10 Lakhs">
+                        ₹2 Lakhs - ₹10 Lakhs
+                      </option>
+                      <option value="₹10 Lakhs+">₹10 Lakhs+</option>
+                    </select>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.26 }}
+                  >
+                    <label
+                      htmlFor="project-timeline"
+                      className="block text-sm font-semibold text-foreground mb-2"
+                    >
+                      Project Duration & Timeline
+                    </label>
+                    <select
+                      id="project-timeline"
+                      name="timeline"
+                      title="Project Timeline"
+                      value={formData.timeline}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-background transition-all text-foreground text-sm font-medium"
+                    >
+                      <option value="Less than 1 Month">
+                        Less than 1 Month
+                      </option>
+                      <option value="1 to 3 Months">1 to 3 Months</option>
+                      <option value="3 to 6 Months">3 to 6 Months</option>
+                      <option value="6+ Months">6+ Months</option>
+                    </select>
+                  </motion.div>
+                </div>
+
+                {/* Hidden field combining timeline and requirements for Google Forms */}
+                <input
+                  type="hidden"
+                  name="entry.2032630066"
+                  value={`Project Duration & Timeline: ${formData.timeline}\nOpinions & Project Requirements:\n${formData.requirements}`}
+                />
+
+                {/* Opinions & Requirements */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.25 }}
+                  transition={{ duration: 0.5, delay: 0.28 }}
                 >
                   <label className="block text-sm font-semibold text-foreground mb-2">
-                    Message
+                    Opinions & Requirements
                   </label>
                   <Textarea
-                    name="message"
-                    value={formData.message}
+                    name="requirements"
+                    value={formData.requirements}
                     onChange={handleChange}
-                    placeholder="Tell us about your project..."
+                    placeholder="Provide your requirements, opinions, and notes about the project..."
                     rows={5}
                     className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
                     required
@@ -385,12 +582,21 @@ export default function Contact() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.3 }}
+                  className="w-full"
                 >
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-600/50 py-3 font-semibold rounded-lg transition-all duration-300"
+                    disabled={contactMutation.isPending}
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-600/50 py-3 font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
                   >
-                    Send Message
+                    {contactMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Sending Message...
+                      </>
+                    ) : (
+                      "Send Message"
+                    )}
                   </Button>
                 </motion.div>
               </form>
@@ -405,7 +611,9 @@ export default function Contact() {
               className="relative h-96 rounded-2xl overflow-hidden"
             >
               <img
-                src="/manus-storage/team-meeting-discussion_7d6c4463.jpg"
+                loading="lazy"
+                decoding="async"
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80"
                 alt="Team meeting"
                 className="w-full h-full object-cover"
               />
@@ -416,6 +624,7 @@ export default function Contact() {
                 className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md rounded-xl p-4 shadow-xl"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
+                style={{ willChange: "transform, opacity" }}
               >
                 <p className="text-sm text-slate-600 mb-1">Response Time</p>
                 <p className="text-2xl font-bold text-blue-600">24 Hours</p>
@@ -453,8 +662,10 @@ export default function Contact() {
               className="rounded-2xl overflow-hidden h-96 border border-slate-200"
             >
               <img
-                src="/manus-storage/global-network-connection_7a1d6ee4.jpg"
-                alt="Global network"
+                loading="lazy"
+                decoding="async"
+                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80"
+                alt="REDDOT HQ Office"
                 className="w-full h-full object-cover"
               />
             </motion.div>
@@ -470,12 +681,14 @@ export default function Contact() {
               <div className="p-8 rounded-2xl border border-slate-200 bg-white hover:border-blue-500 transition-all">
                 <MapPin className="w-8 h-8 text-blue-600 mb-4" />
                 <h3 className="text-2xl font-bold text-foreground mb-2">
-                  San Francisco HQ
+                  REDDOT AI India HQ
                 </h3>
                 <p className="text-slate-600 mb-4">
-                  123 Innovation Drive<br />
-                  San Francisco, CA 94105<br />
-                  United States
+                  REDDOT Towers, 4th Floor
+                  <br />
+                  OMR Road, Chennai, Tamil Nadu 600096
+                  <br />
+                  India
                 </p>
                 <Button className="bg-blue-600 text-white hover:bg-blue-700">
                   Get Directions
@@ -487,9 +700,15 @@ export default function Contact() {
                   Business Hours
                 </h4>
                 <div className="space-y-2 text-slate-600">
-                  <p><strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM PST</p>
-                  <p><strong>Saturday:</strong> 10:00 AM - 4:00 PM PST</p>
-                  <p><strong>Sunday:</strong> Closed</p>
+                  <p>
+                    <strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM PST
+                  </p>
+                  <p>
+                    <strong>Saturday:</strong> 10:00 AM - 4:00 PM PST
+                  </p>
+                  <p>
+                    <strong>Sunday:</strong> Closed
+                  </p>
                 </div>
               </div>
 
@@ -498,9 +717,15 @@ export default function Contact() {
                   Schedule a Meeting
                 </h4>
                 <p className="text-slate-600 mb-4">
-                  Can't visit in person? Schedule a virtual meeting with our team.
+                  Can't visit in person? Schedule a virtual meeting with our
+                  team.
                 </p>
-                <Button className="w-full bg-purple-600 text-white hover:bg-purple-700">
+                <Button
+                  onClick={() =>
+                    window.dispatchEvent(new CustomEvent("open-booking"))
+                  }
+                  className="w-full bg-purple-600 text-white hover:bg-purple-700"
+                >
                   Book a Call
                 </Button>
               </div>
@@ -515,12 +740,12 @@ export default function Contact() {
         <motion.div
           className="absolute inset-0 -z-10"
           animate={{
-            backgroundPosition: ['0% 0%', '100% 100%'],
+            backgroundPosition: ["0% 0%", "100% 100%"],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: 'linear' as any,
+            ease: "linear" as any,
           }}
         />
 
@@ -541,7 +766,8 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            Let's discuss how REDDOT can help you achieve your goals with innovative AI solutions and enterprise software.
+            Let's discuss how REDDOT can help you achieve your goals with
+            innovative AI solutions and enterprise software.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -549,12 +775,25 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Button className="bg-white text-blue-600 hover:bg-slate-100 px-8 py-3 font-semibold rounded-lg">
+            <Button
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent("open-booking"))
+              }
+              className="bg-white text-blue-600 hover:bg-slate-100 px-8 py-3 font-semibold rounded-lg"
+            >
               Schedule a Consultation
             </Button>
           </motion.div>
         </div>
       </section>
+
+      {/* Hidden iframe for Google Form submission */}
+      <iframe
+        name="hidden_iframe"
+        id="hidden_iframe"
+        className="hidden"
+        title="Hidden submission frame"
+      ></iframe>
     </div>
   );
 }

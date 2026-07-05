@@ -8,6 +8,8 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { AccessToken } from "livekit-server-sdk";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +38,32 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+
+  // LiveKit Token Route
+  app.get("/api/livekit-token", async (req, res, next) => {
+    try {
+      const { LIVEKIT_API_KEY, LIVEKIT_API_SECRET } = process.env;
+      if (!LIVEKIT_API_KEY || !LIVEKIT_API_SECRET) {
+        return res.status(500).json({ error: "LiveKit API keys are not configured on the server." });
+      }
+
+      const participantIdentity = `user-${Math.floor(Math.random() * 10000)}`;
+      const roomName = "reddot-support";
+
+      const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
+        identity: participantIdentity,
+      });
+
+      at.addGrant({ roomJoin: true, room: roomName, canPublish: true, canSubscribe: true });
+
+      const token = await at.toJwt();
+      res.json({ token });
+    } catch (error) {
+      console.error("Error generating LiveKit token:", error);
+      res.status(500).json({ error: "Failed to generate token" });
+    }
+  });
+
   // tRPC API
   app.use(
     "/api/trpc",

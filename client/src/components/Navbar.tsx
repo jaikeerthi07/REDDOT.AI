@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X, Search, Globe, Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Menu, X, Search, Globe, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,45 +11,62 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const nextIsScrolled = window.scrollY > 50;
+      setIsScrolled(current =>
+        current === nextIsScrolled ? current : nextIsScrolled
+      );
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navItems = [
-    { label: 'Home', href: '#' },
-    { label: 'Services', href: '#services' },
-    { label: 'Solutions', href: '#solutions' },
-    { label: 'Industries', href: '#industries' },
-    { label: 'About', href: '#about' },
-    { label: 'Blog', href: '#blog' },
-    { label: 'Career', href: '#career' },
-    { label: 'Contact', href: '#contact' },
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/products" },
+    { label: "Services", href: "/#services" },
+    { label: "Industries", href: "/industries" },
+    { label: "Blog", href: "/blog" },
+    { label: "Career", href: "/career" },
+    { label: "Internships", href: "/internship" },
+    { label: "Contact", href: "/contact" },
   ];
 
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass' : 'bg-transparent'
+        isScrolled ? "glass" : "bg-transparent"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container flex items-center justify-between h-20">
+      <div className="container flex items-center justify-between h-20 gap-4 lg:gap-8">
         {/* Logo */}
         <motion.div
-          className="text-2xl font-bold text-gradient"
+          className="flex items-center gap-3 cursor-pointer py-1 mr-4 lg:mr-8 shrink-0"
           whileHover={{ scale: 1.05 }}
+          onClick={() => (window.location.href = "/")}
         >
-          REDDOT
+          <img
+            loading="lazy"
+            decoding="async"
+            src="/images/reddot-logo-navbar.png"
+            alt="REDDOT Logo"
+            width={64}
+            height={64}
+            className="h-14 w-14 sm:h-16 sm:w-16 object-contain"
+            decoding="async"
+          />
+          <span className="text-3xl sm:text-4xl font-extrabold text-gradient tracking-tight">
+            REDDOT
+          </span>
         </motion.div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
+        <div className="hidden lg:flex items-center gap-4 xl:gap-8 flex-1 justify-center">
+          {navItems.map(item => (
             <motion.a
               key={item.label}
               href={item.href}
@@ -60,7 +77,7 @@ export default function Navbar() {
               <motion.span
                 className="absolute bottom-0 left-0 h-0.5 bg-gradient-primary"
                 initial={{ width: 0 }}
-                whileHover={{ width: '100%' }}
+                whileHover={{ width: "100%" }}
                 transition={{ duration: 0.3 }}
               />
             </motion.a>
@@ -94,7 +111,7 @@ export default function Navbar() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            {theme === 'dark' ? (
+            {theme === "dark" ? (
               <Sun size={20} className="text-slate-600" />
             ) : (
               <Moon size={20} className="text-slate-600" />
@@ -102,11 +119,11 @@ export default function Navbar() {
           </motion.button>
 
           {/* Book Consultation Button */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent("open-booking"))
+              }
               className="hidden sm:inline-flex bg-gradient-primary text-white hover:shadow-lg transition-shadow"
             >
               Book Consultation
@@ -133,13 +150,13 @@ export default function Navbar() {
         initial={{ opacity: 0, height: 0 }}
         animate={{
           opacity: isMobileMenuOpen ? 1 : 0,
-          height: isMobileMenuOpen ? 'auto' : 0,
+          height: isMobileMenuOpen ? "auto" : 0,
         }}
         transition={{ duration: 0.3 }}
         className="md:hidden overflow-hidden border-t border-border"
       >
         <div className="container py-4 flex flex-col gap-4">
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <motion.a
               key={item.label}
               href={item.href}
@@ -150,7 +167,13 @@ export default function Navbar() {
               {item.label}
             </motion.a>
           ))}
-          <Button className="w-full bg-gradient-primary text-white">
+          <Button
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              window.dispatchEvent(new CustomEvent("open-booking"));
+            }}
+            className="w-full bg-gradient-primary text-white"
+          >
             Book Consultation
           </Button>
         </div>

@@ -1,0 +1,17 @@
+name: Keep Render App Alive
+
+# This workflow runs every 10 minutes to send a request to your Render app
+# This prevents Render's free tier from putting the app to sleep.
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  # Allows you to trigger it manually if needed
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the server
+        # TODO: Replace the URL below with your actual Render URL once you deploy
+        run: curl -s https://your-app-name.onrender.com > /dev/null

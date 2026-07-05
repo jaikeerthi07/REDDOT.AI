@@ -1,23 +1,93 @@
-import { motion } from 'framer-motion';
-import {
-  Heart, BookOpen, DollarSign, Factory, ShoppingCart, Leaf,
-  Building2, Radio, Building, Zap, Car, Stethoscope
-} from 'lucide-react';
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Industries() {
   const industries = [
-    { name: 'Healthcare', icon: Heart, color: 'from-red-500 to-pink-500' },
-    { name: 'Education', icon: BookOpen, color: 'from-blue-500 to-cyan-500' },
-    { name: 'Finance', icon: DollarSign, color: 'from-green-500 to-emerald-500' },
-    { name: 'Manufacturing', icon: Factory, color: 'from-orange-500 to-yellow-500' },
-    { name: 'Retail', icon: ShoppingCart, color: 'from-pink-500 to-rose-500' },
-    { name: 'Agriculture', icon: Leaf, color: 'from-green-600 to-lime-500' },
-    { name: 'Government', icon: Building2, color: 'from-slate-600 to-slate-500' },
-    { name: 'Telecommunications', icon: Radio, color: 'from-purple-500 to-indigo-500' },
-    { name: 'Smart Cities', icon: Building, color: 'from-cyan-500 to-blue-500' },
-    { name: 'Energy', icon: Zap, color: 'from-yellow-500 to-orange-500' },
-    { name: 'Automotive', icon: Car, color: 'from-gray-600 to-slate-600' },
-    { name: 'Healthcare Tech', icon: Stethoscope, color: 'from-red-600 to-pink-600' },
+    {
+      name: "Healthcare",
+      image:
+        "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800",
+      description:
+        "AI-driven diagnostics, predictive patient care, and streamlined hospital operations.",
+    },
+    {
+      name: "Education",
+      image:
+        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Personalized learning pathways, automated grading, and intelligent tutoring systems.",
+    },
+    {
+      name: "Finance",
+      image:
+        "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Algorithmic trading, fraud detection, and automated risk assessment algorithms.",
+    },
+    {
+      name: "Manufacturing",
+      image:
+        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Robotic automation, predictive maintenance, and intelligent supply chain routing.",
+    },
+    {
+      name: "Retail",
+      image:
+        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Inventory forecasting, personalized recommendations, and dynamic pricing models.",
+    },
+    {
+      name: "Agriculture",
+      image:
+        "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Drone-assisted crop monitoring, yield prediction, and automated precision farming.",
+    },
+    {
+      name: "Government",
+      image:
+        "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Secure data management, smart infrastructure, and citizen-centric AI services.",
+    },
+    {
+      name: "Telecommunications",
+      image:
+        "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Network optimization, predictive fault detection, and automated customer support.",
+    },
+    {
+      name: "Smart Cities",
+      image:
+        "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Traffic optimization, automated grid management, and public safety analytics.",
+    },
+    {
+      name: "Energy",
+      image:
+        "https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Smart grid load balancing, renewable energy forecasting, and infrastructure monitoring.",
+    },
+    {
+      name: "Automotive",
+      image:
+        "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Autonomous driving algorithms, advanced driver-assistance systems, and fleet logistics.",
+    },
+    {
+      name: "Healthcare Tech",
+      image:
+        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
+      description:
+        "Medical imaging analysis, genomics, and real-time health monitoring systems.",
+    },
   ];
 
   const containerVariants = {
@@ -25,124 +95,163 @@ export default function Industries() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.2,
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
     visible: {
       opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { duration: 0.5 },
+      transition: { duration: 0.8, ease: [0.25, 0.4, 0.25, 1] as any },
     },
   };
 
   return (
-    <section id="industries" className="py-24 bg-background-secondary border-t border-b border-slate-200 relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-20" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-20" />
+    <section
+      id="industries"
+      className="py-32 bg-[#050B14] relative overflow-hidden border-t border-b border-white/5"
+    >
+      {/* Cinematic Deep Background */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-5 mix-blend-screen" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] via-[#050B14]/90 to-[#050B14]" />
+
+        {/* Animated Glow Orbs */}
+        <motion.div
+          className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] mix-blend-screen"
+          animate={{ x: [0, 100, 0], y: [0, -50, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          style={{ willChange: "transform, opacity" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen"
+          animate={{ x: [0, -100, 0], y: [0, 50, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          style={{ willChange: "transform, opacity" }}
+        />
       </div>
 
-      <div className="container">
+      <div className="container relative z-10 max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
+          className="text-center mb-24"
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
         >
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-2">
-            Industries We Serve
-          </p>
-          <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
-            Transforming Every Sector
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-block px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md mb-6"
+            style={{ willChange: "transform, opacity" }}
+          >
+            <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">
+              Industries We Serve
+            </p>
+          </motion.div>
+
+          <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
+            Transforming{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              Every Sector
+            </span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            We partner with leading organizations across diverse industries to deliver innovative AI and technology solutions.
+          <p className="text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed">
+            We partner with visionary organizations across diverse industries to
+            deploy mission-critical AI systems that redefine what's possible.
           </p>
         </motion.div>
 
-        {/* Industries Grid */}
+        {/* Cinematic Industries Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
         >
-          {industries.map((industry, idx) => {
-            const Icon = industry.icon;
-            return (
+          {industries.map((industry, idx) => (
+            <Link key={idx} href="/industries" className="block">
               <motion.div
-                key={idx}
-                className="group relative p-8 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 transition-all duration-300 cursor-pointer overflow-hidden"
                 variants={itemVariants}
-                whileHover={{
-                  y: -12,
-                  boxShadow: '0 25px 50px rgba(37, 99, 235, 0.2)',
-                }}
+                className="group relative h-[400px] rounded-3xl overflow-hidden cursor-pointer"
               >
-                {/* Gradient Background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${industry.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${industry.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-
-                  <h3 className="text-xl font-bold text-foreground mb-2">
-                    {industry.name}
-                  </h3>
-
-                  <p className="text-slate-600 text-sm mb-4">
-                    Innovative solutions tailored for {industry.name.toLowerCase()}
-                  </p>
-
-                  <motion.div
-                    className="flex items-center text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ x: -10 }}
-                    whileHover={{ x: 5 }}
-                  >
-                    Explore →
-                  </motion.div>
+                {/* Image Background */}
+                <div className="absolute inset-0">
+                  <img
+                    src={industry.image}
+                    alt={industry.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-[0.25,0.4,0.25,1]"
+                  />
+                  {/* Dual Gradient Overlay for Cinematic Depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/60 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700" />
+                  <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay group-hover:bg-blue-500/20 transition-colors duration-700" />
                 </div>
 
-                {/* Animated Accent */}
-                <motion.div
-                  className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${industry.color}`}
-                  initial={{ scaleY: 0 }}
-                  whileHover={{ scaleY: 1 }}
-                  transition={{ duration: 0.3 }}
-                  style={{ transformOrigin: 'top' }}
-                />
+                {/* Content Container */}
+                <div className="absolute inset-0 flex flex-col justify-end p-8">
+                  <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                    <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">
+                      {industry.name}
+                    </h3>
+
+                    <div className="overflow-hidden">
+                      <p className="text-slate-300 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                        {industry.description}
+                      </p>
+                    </div>
+
+                    {/* Explore Button */}
+                    <div className="mt-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-150">
+                      <span className="text-cyan-400 font-semibold text-sm uppercase tracking-wider">
+                        Explore Capabilities
+                      </span>
+                      <ArrowRight className="w-4 h-4 text-cyan-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hover Border Glow */}
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-cyan-500/30 rounded-3xl transition-colors duration-500 pointer-events-none" />
               </motion.div>
-            );
-          })}
+            </Link>
+          ))}
         </motion.div>
 
         {/* Stats Section */}
         <motion.div
-          className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8"
-          initial={{ opacity: 0, y: 20 }}
+          className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8"
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
           {[
-            { number: '500+', label: 'Enterprise Clients' },
-            { number: '12', label: 'Industries Served' },
-            { number: '1000+', label: 'Projects Delivered' },
+            { number: "500+", label: "Enterprise Deployments" },
+            { number: "12+", label: "Sectors Transformed" },
+            { number: "99.9%", label: "System Reliability" },
           ].map((stat, idx) => (
-            <div key={idx} className="text-center p-6 rounded-xl bg-white border border-slate-200">
-              <p className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</p>
-              <p className="text-slate-600">{stat.label}</p>
+            <div
+              key={idx}
+              className="relative group text-center p-10 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-md hover:bg-white/[0.04] hover:border-cyan-500/30 transition-all duration-500 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-500/0 to-cyan-500/0 group-hover:from-blue-500/5 group-hover:to-cyan-500/5 transition-colors duration-500" />
+              <p className="relative z-10 text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-4">
+                {stat.number}
+              </p>
+              <p className="relative z-10 text-slate-400 font-medium tracking-wide uppercase text-sm">
+                {stat.label}
+              </p>
             </div>
           ))}
         </motion.div>
