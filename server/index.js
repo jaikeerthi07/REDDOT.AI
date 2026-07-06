@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import https from 'https';
 
 dotenv.config();
 
@@ -10,6 +11,11 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Keep-awake endpoint
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
 
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
@@ -57,4 +63,15 @@ You assist users with navigating the Reddot AI website, understanding AI solutio
 
 app.listen(port, () => {
   console.log(`Support Agent backend running on http://localhost:${port}`);
+  
+  // Prevent Render from sleeping by pinging the service every 14 minutes
+  const externalUrl = process.env.RENDER_EXTERNAL_URL || 'https://reddot-ai.onrender.com';
+  console.log(`Setting up keep-alive ping for ${externalUrl} ...`);
+  setInterval(() => {
+    https.get(`${externalUrl}/ping`, (resp) => {
+      console.log(`Keep-alive ping sent to ${externalUrl} - Status: ${resp.statusCode}`);
+    }).on("error", (err) => {
+      console.error(`Keep-alive ping failed: ${err.message}`);
+    });
+  }, 14 * 60 * 1000); // 14 minutes
 });

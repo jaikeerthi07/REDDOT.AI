@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
+import https from "https";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
@@ -38,6 +39,11 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+
+  // Keep-alive endpoint to prevent Render from sleeping
+  app.get("/api/ping", (req, res) => {
+    res.status(200).send("pong");
+  });
 
   // LiveKit Token Route
   app.get("/api/livekit-token", async (req, res, next) => {
@@ -88,6 +94,17 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    
+    // Prevent Render from sleeping by pinging the service every 14 minutes
+    const externalUrl = process.env.RENDER_EXTERNAL_URL || 'https://reddot-ai.onrender.com';
+    console.log(`Setting up keep-alive ping for ${externalUrl} ...`);
+    setInterval(() => {
+      https.get(`${externalUrl}/api/ping`, (resp) => {
+        console.log(`Keep-alive ping sent to ${externalUrl} - Status: ${resp.statusCode}`);
+      }).on("error", (err) => {
+        console.error(`Keep-alive ping failed: ${err.message}`);
+      });
+    }, 14 * 60 * 1000); // 14 minutes
   });
 }
 
