@@ -275,7 +275,7 @@ function AgentInterface() {
             )}
           </div>
 
-          <VoiceAssistantControlBar className="[&>button]:bg-blue-600 [&>button:hover]:bg-blue-700 shadow-xl border border-white/20 rounded-2xl" />
+          <VoiceAssistantControlBar />
         </div>
       </div>
 
