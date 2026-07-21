@@ -18,13 +18,16 @@ jobs:
             # If app directory exists but isn't a git repo, recreate it
             if [ -d "$HOME/app" ] && [ ! -d "$HOME/app/.git" ]; then
               echo "Re-initializing as a git repository..."
-              rm -rf $HOME/app
+              sudo rm -rf $HOME/app
             fi
             
             # Clone if it doesn't exist
             if [ ! -d "$HOME/app" ]; then
               git clone https://github.com/jaikeerthi07/REDDOT.AI.git $HOME/app
             fi
+            
+            # Ensure permissions are correct
+            sudo chown -R $USER:$USER $HOME/app
             
             cd $HOME/app
             git fetch --all
