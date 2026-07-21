@@ -34,5 +34,5 @@ jobs:
             git reset --hard origin/main
             
             # Run deployment
-            chmod +x ./remote_deploy.sh
-            ./remote_deploy.sh
+            chmod +x ./deploy.sh
+            ./deploy.sh
