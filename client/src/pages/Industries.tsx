@@ -257,17 +257,7 @@ export default function Industries() {
         </div>
 
         <div className="container relative z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md mb-8"
-            style={{ willChange: "transform, opacity" }}
-          >
-            <Sparkles size={14} className="text-cyan-400 animate-pulse" />
-            <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">
-              Enterprise Transformations
-            </span>
-          </motion.div>
+
 
           <motion.h1
             className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none"

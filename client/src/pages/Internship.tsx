@@ -85,17 +85,6 @@ export default function Internship() {
           style={{ y: parallaxY }}
           className="container text-center relative z-10 px-4"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8 flex justify-center"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-sm shadow-sm">
-              <Sparkles className="w-4 h-4" />
-              <span>Launch Your AI Career</span>
-            </div>
-          </motion.div>
 
           <motion.h1
             className="text-6xl md:text-8xl font-black text-slate-900 mb-8 tracking-tight"

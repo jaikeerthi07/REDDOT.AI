@@ -74,10 +74,7 @@ export default function Products() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-600 text-sm font-semibold uppercase tracking-wider mb-6 dark:bg-blue-950/30 dark:border-blue-500/30 dark:text-blue-400">
-            <GraduationCap size={16} />
-            Academic & Campus Suite
-          </div>
+
           <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-indigo-200 dark:to-purple-400">
             SEM
           </h1>
