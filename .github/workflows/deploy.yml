@@ -8,19 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Copy files to server
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
-          target: "~/app"
-          rm: true
-
       - name: Execute deployment script on remote server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -28,6 +15,21 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/app
+            # If app directory exists but isn't a git repo, recreate it
+            if [ -d "$HOME/app" ] && [ ! -d "$HOME/app/.git" ]; then
+              echo "Re-initializing as a git repository..."
+              rm -rf $HOME/app
+            fi
+            
+            # Clone if it doesn't exist
+            if [ ! -d "$HOME/app" ]; then
+              git clone https://github.com/jaikeerthi07/REDDOT.AI.git $HOME/app
+            fi
+            
+            cd $HOME/app
+            git fetch --all
+            git reset --hard origin/main
+            
+            # Run deployment
             chmod +x ./remote_deploy.sh
             ./remote_deploy.sh
