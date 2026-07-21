@@ -210,16 +210,6 @@ export default function Contact() {
           style={{ y: parallaxY, opacity }}
           className="container text-center relative z-10"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-6"
-          >
-            <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
-              Get in Touch
-            </span>
-          </motion.div>
 
           <motion.h1
             className="text-6xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
