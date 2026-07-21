@@ -57,7 +57,6 @@ export default function Navbar() {
             width={64}
             height={64}
             className="h-14 w-14 sm:h-16 sm:w-16 object-contain"
-            decoding="async"
           />
           <span className="text-3xl sm:text-4xl font-extrabold text-gradient tracking-tight">
             REDDOT
