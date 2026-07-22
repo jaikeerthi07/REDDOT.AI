@@ -303,15 +303,11 @@ export default function Services() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-600 text-sm font-semibold uppercase tracking-wider mb-4 dark:bg-blue-950/30 dark:border-blue-500/30 dark:text-blue-400">
-              <Sparkles size={14} className="animate-pulse" />
-              Capabilities Showcase
-            </span>
             <h2 className="text-5xl md:text-7xl font-black tracking-tight text-slate-900 dark:text-white mb-6">
               Our core
               <br />
@@ -319,7 +315,7 @@ export default function Services() {
                 Business Services
               </span>
             </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto dark:text-slate-400">
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto dark:text-slate-400 font-light">
               Transforming complex engineering challenges into secure, scalable,
               and intelligent enterprise platforms.
             </p>

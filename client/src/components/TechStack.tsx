@@ -148,14 +148,6 @@ const TechStack = memo(function TechStack() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <motion.p
-            className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-4"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Our Arsenal
-          </motion.p>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
             Built With
             <br />

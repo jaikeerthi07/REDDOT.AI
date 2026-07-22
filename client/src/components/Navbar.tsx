@@ -45,20 +45,24 @@ export default function Navbar() {
       <div className="container flex items-center justify-between h-20 gap-4 lg:gap-8">
         {/* Logo */}
         <motion.div
-          className="flex items-center gap-3 cursor-pointer py-1 mr-4 lg:mr-8 shrink-0"
+          className="flex items-center gap-3 cursor-pointer py-1 mr-4 lg:mr-8 shrink-0 group"
           whileHover={{ scale: 1.05 }}
           onClick={() => (window.location.href = "/")}
         >
-          <img
-            loading="lazy"
-            decoding="async"
-            src="/images/reddot-logo-navbar.png"
-            alt="REDDOT Logo"
-            width={64}
-            height={64}
-            className="h-14 w-14 sm:h-16 sm:w-16 object-contain"
-          />
-          <span className="text-3xl sm:text-4xl font-extrabold text-gradient tracking-tight">
+          <div className="relative flex items-center justify-center p-1.5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10 border border-blue-500/20 shadow-sm group-hover:border-blue-500/50 group-hover:shadow-blue-500/20 transition-all duration-300">
+            <motion.img
+              loading="lazy"
+              decoding="async"
+              src="/images/reddot-logo-navbar.png"
+              alt="REDDOT Logo"
+              width={64}
+              height={64}
+              className="h-10 w-10 sm:h-12 sm:w-12 object-contain drop-shadow-[0_0_10px_rgba(37,99,235,0.4)]"
+              whileHover={{ rotate: [0, -5, 5, 0] }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+          <span className="text-2xl sm:text-3xl font-black text-gradient tracking-tight">
             REDDOT
           </span>
         </motion.div>
@@ -69,7 +73,7 @@ export default function Navbar() {
             <motion.a
               key={item.label}
               href={item.href}
-              className="text-slate-600 hover:text-slate-900 transition-colors relative group"
+              className="text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors relative group"
               whileHover={{ y: -2 }}
             >
               {item.label}
@@ -87,43 +91,43 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           {/* Search */}
           <motion.button
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Search size={20} className="text-slate-600" />
+            <Search size={20} className="text-slate-600 dark:text-slate-300" />
           </motion.button>
 
           {/* Language Selector */}
           <motion.button
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Globe size={20} className="text-slate-600" />
+            <Globe size={20} className="text-slate-600 dark:text-slate-300" />
           </motion.button>
 
           {/* Dark Mode Toggle */}
           <motion.button
             onClick={toggleTheme}
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
             {theme === "dark" ? (
-              <Sun size={20} className="text-slate-600" />
+              <Sun size={20} className="text-amber-400" />
             ) : (
               <Moon size={20} className="text-slate-600" />
             )}
           </motion.button>
 
-          {/* Book Consultation Button */}
+          {/* Book Consultation Button — Always Visible */}
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               onClick={() =>
                 window.dispatchEvent(new CustomEvent("open-booking"))
               }
-              className="hidden sm:inline-flex bg-gradient-primary text-white hover:shadow-lg transition-shadow"
+              className="hidden sm:inline-flex bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 text-white font-bold px-6 py-2.5 rounded-xl shadow-md hover:shadow-lg hover:shadow-blue-500/30 transition-all opacity-100 border border-blue-400/30 cursor-pointer"
             >
               Book Consultation
             </Button>

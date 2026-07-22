@@ -145,19 +145,6 @@ export default function Industries() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-block px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md mb-6"
-            style={{ willChange: "transform, opacity" }}
-          >
-            <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">
-              Industries We Serve
-            </p>
-          </motion.div>
-
           <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
             Transforming{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">

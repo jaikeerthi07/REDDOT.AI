@@ -105,15 +105,6 @@ export default function Team() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <motion.p
-            className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-4"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Our Leadership
-          </motion.p>
           <h2 className="text-6xl md:text-7xl font-bold text-foreground mb-6">
             Meet the
             <br />

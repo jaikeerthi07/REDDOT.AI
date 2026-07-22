@@ -66,15 +66,11 @@ const CaseStudies = memo(function CaseStudies() {
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7 }}
         >
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
-            <Sparkles size={14} />
-            Our Flagship Products
-          </p>
           <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
             Built to{" "}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

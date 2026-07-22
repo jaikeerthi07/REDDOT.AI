@@ -137,13 +137,10 @@ export default function TrustedCompanies() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-blue-400 text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-            Trusted By Leading Companies
-          </p>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Powering Innovation Across Industries
           </h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-400 max-w-2xl mx-auto font-light">
             Join the world's most innovative teams building the future with our
             enterprise AI solutions.
           </p>

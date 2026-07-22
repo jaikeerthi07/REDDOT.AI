@@ -180,29 +180,37 @@ const Hero = memo(function Hero() {
           for global industry leaders.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons — Always Visible with High Contrast */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-5 justify-center items-center relative z-20"
           variants={itemVariants as any}
         >
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.div
+            whileHover={{ scale: 1.06, y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            className="w-full sm:w-auto"
+          >
             <Button
-              className="px-8 py-6 text-lg bg-gradient-primary text-white hover:shadow-lg transition-shadow flex items-center gap-2"
+              className="w-full sm:w-auto px-9 py-7 text-lg bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 text-white font-extrabold rounded-xl shadow-xl shadow-blue-500/25 hover:shadow-cyan-500/40 transition-all duration-300 flex items-center justify-center gap-3 border border-blue-400/40 cursor-pointer tracking-wide"
               onClick={() =>
                 document
                   .getElementById("projects-section")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              Start Your Project
-              <ArrowRight size={20} />
+              <span className="relative z-10">Start Your Project</span>
+              <ArrowRight size={22} className="relative z-10 animate-pulse" />
             </Button>
           </motion.div>
 
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.div
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            className="w-full sm:w-auto"
+          >
             <Button
               variant="outline"
-              className="px-8 py-6 text-lg border-2 border-foreground-tertiary hover:border-foreground transition-colors"
+              className="w-full sm:w-auto px-9 py-7 text-lg border-2 border-blue-600/40 text-blue-600 dark:text-cyan-400 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md hover:bg-blue-50 dark:hover:bg-slate-800 font-bold rounded-xl shadow-md transition-all cursor-pointer"
               onClick={() =>
                 document
                   .getElementById("services-section")

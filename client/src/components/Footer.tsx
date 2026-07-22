@@ -136,17 +136,19 @@ const Footer = memo(function Footer() {
             viewport={{ once: true }}
           >
             <motion.div variants={itemVariants}>
-              <div className="flex items-center gap-3 mb-4">
-                <img
-                  src="/images/reddot-logo-navbar.png"
-                  alt="REDDOT Logo"
-                  width={72}
-                  height={72}
-                  className="h-16 w-16 sm:h-[72px] sm:w-[72px] object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span className="text-4xl font-extrabold text-gradient tracking-tight">
+              <div className="flex items-center gap-3 mb-4 group">
+                <div className="relative flex items-center justify-center p-1.5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10 border border-blue-500/20 shadow-sm">
+                  <img
+                    src="/images/reddot-logo-navbar.png"
+                    alt="REDDOT Logo"
+                    width={72}
+                    height={72}
+                    className="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-[0_0_10px_rgba(37,99,235,0.4)]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <span className="text-3xl sm:text-4xl font-extrabold text-gradient tracking-tight">
                   REDDOT
                 </span>
               </div>

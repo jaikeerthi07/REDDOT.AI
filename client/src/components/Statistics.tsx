@@ -186,20 +186,6 @@ export default function Statistics() {
           transition={{ duration: 0.8 }}
           style={{ willChange: "transform, opacity" }}
         >
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ willChange: "transform, opacity" }}
-          >
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-sm font-semibold text-white/80">
-              By the Numbers
-            </span>
-          </motion.div>
-
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
             Powering Global
             <br />

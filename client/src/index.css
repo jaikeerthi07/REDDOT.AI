@@ -291,8 +291,9 @@
   }
 
   /* Gradient backgrounds */
-  .gradient-primary {
-    background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  .gradient-primary,
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%) !important;
   }
 
   .gradient-secondary {

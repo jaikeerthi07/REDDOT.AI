@@ -220,15 +220,6 @@ export default function AITimeline() {
           viewport={{ once: true }}
           transition={{ duration: 1 }}
         >
-          <motion.p
-            className="text-cyan-400 text-sm font-semibold uppercase tracking-[0.2em] mb-4"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Our Process
-          </motion.p>
           <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
             AI Solutions
             <br />
@@ -333,15 +324,15 @@ export default function AITimeline() {
             Ready to transform your business with AI?
           </p>
           <motion.button
-            className="px-10 py-5 bg-cyan-500 text-slate-950 rounded-full font-bold text-lg hover:bg-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all inline-flex items-center gap-3 relative overflow-hidden group"
+            className="px-10 py-5 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 text-white rounded-full font-extrabold text-lg hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all inline-flex items-center gap-3 relative overflow-hidden group shadow-xl border border-cyan-400/40 cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() =>
               window.dispatchEvent(new CustomEvent("open-booking"))
             }
           >
-            <span className="relative z-10">Start Your Project</span>
-            <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+            <span className="relative z-10 text-white font-extrabold tracking-wide">Start Your Project</span>
+            <ArrowRight className="w-5 h-5 relative z-10 text-white group-hover:translate-x-1 transition-transform" />
           </motion.button>
         </motion.div>
       </div>

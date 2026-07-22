@@ -187,9 +187,6 @@ export default function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-4">
-            About REDDOT
-          </p>
           <h2 className="text-6xl md:text-7xl font-bold text-foreground mb-6">
             Engineering Intelligence
             <br />
