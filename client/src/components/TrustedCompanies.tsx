@@ -146,37 +146,48 @@ export default function TrustedCompanies() {
           </p>
         </motion.div>
 
-        {/* Companies Grid */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+        {/* Companies Infinite Marquee Banner */}
+        <div
+          className="overflow-hidden w-full py-4 relative"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+          }}
         >
-          {companies.map((company, index) => (
-            <motion.div
-              key={company.name}
-              className="group relative flex flex-col items-center justify-center p-8 lg:p-10 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-xl hover:bg-white/[0.05] hover:border-white/20 hover:shadow-[0_0_40px_rgba(37,99,235,0.15)] transition-all duration-500 overflow-hidden cursor-pointer"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              animate={floatingAnimation}
-              style={{ animationDelay: `${index * 0.15}s` }}
-            >
-              {/* Card internal glow on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-colors duration-500" />
-
-              <div className="relative z-10 h-16 flex items-center justify-center mb-4 text-slate-400 group-hover:text-white transition-colors duration-500">
-                {company.component && (
-                  <company.component className="h-12 w-auto opacity-70 group-hover:opacity-100 group-hover:scale-110 drop-shadow-sm transition-all duration-500" />
-                )}
-              </div>
-              <p className="relative z-10 text-sm font-semibold text-slate-500 group-hover:text-blue-300 transition-colors duration-500">
-                {company.name}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+          <motion.div
+            className="flex gap-6 w-max"
+            animate={{
+              x: ["0%", "-50%"],
+            }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 22,
+                ease: "linear",
+              },
+            }}
+          >
+            {[...companies, ...companies, ...companies, ...companies].map((company, index) => (
+              <motion.div
+                key={`${company.name}-${index}`}
+                className="group relative flex flex-col items-center justify-center p-6 lg:p-8 w-60 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.08] hover:border-blue-400/40 hover:shadow-[0_0_30px_rgba(37,99,235,0.25)] transition-all duration-300 overflow-hidden cursor-pointer flex-shrink-0"
+                whileHover={{ scale: 1.08, y: -4 }}
+              >
+                <div className="relative z-10 h-14 flex items-center justify-center mb-3 text-slate-400 group-hover:text-white transition-colors duration-300">
+                  {company.component && (
+                    <company.component className="h-10 w-auto opacity-70 group-hover:opacity-100 group-hover:scale-110 drop-shadow-sm transition-all duration-300" />
+                  )}
+                </div>
+                <p className="relative z-10 text-xs font-bold text-slate-400 group-hover:text-cyan-300 transition-colors duration-300 tracking-wide">
+                  {company.name}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
 
         {/* Animated Gradient Background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">

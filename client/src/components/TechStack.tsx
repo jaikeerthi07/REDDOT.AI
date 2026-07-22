@@ -46,55 +46,57 @@ const techItems: TechItem[] = [
 function MarqueeRow({
   items,
   direction = 1,
-  speed = 30,
+  speed = 25,
 }: {
   items: TechItem[];
   direction?: 1 | -1;
   speed?: number;
 }) {
-  const x = useMotionValue(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useReducedMotion();
+  if (!items || items.length === 0) return null;
 
-  useAnimationFrame((_, delta) => {
-    if (shouldReduceMotion || document.hidden) return;
-    const moveBy = direction * (speed / 1000) * delta;
-    if (ref.current) {
-      const width = ref.current.scrollWidth / 2;
-      if (!width) return;
-      x.set((x.get() + moveBy) % -width);
-    }
-  });
-
-  const doubledItems = [...items, ...items];
+  // Quadruple items to guarantee an uninterrupted, smooth infinite loop across all screen sizes
+  const repeatedItems = [...items, ...items, ...items, ...items];
 
   return (
     <div
-      className="overflow-hidden w-full"
+      className="overflow-hidden w-full py-2 relative"
       style={{
         maskImage:
+          "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+        WebkitMaskImage:
           "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
       }}
     >
       <motion.div
-        ref={ref}
-        className="flex gap-4 will-change-transform"
-        style={{ x }}
+        className="flex gap-4 w-max"
+        animate={{
+          x: direction === -1 ? ["0%", "-50%"] : ["-50%", "0%"],
+        }}
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: speed,
+            ease: "linear",
+          },
+        }}
       >
-        {doubledItems.map((tech, idx) => (
+        {repeatedItems.map((tech, idx) => (
           <motion.div
-            key={idx}
+            key={`${tech.name}-${idx}`}
             className="group relative flex-shrink-0"
-            whileHover={{ scale: 1.1, y: -4 }}
+            whileHover={{ scale: 1.08, y: -4 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="flex items-center gap-3 px-5 py-3 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-300 cursor-default">
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:border-blue-400 transition-all duration-300 cursor-pointer dark:bg-slate-900 dark:border-slate-800">
               <span className="text-2xl">{tech.logo}</span>
               <div>
-                <p className="text-sm font-bold text-slate-800 whitespace-nowrap">
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">
                   {tech.name}
                 </p>
-                <p className="text-xs text-slate-500">{tech.category}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {tech.category}
+                </p>
               </div>
             </div>
             {/* Tooltip */}
@@ -118,8 +120,16 @@ const TechStack = memo(function TechStack() {
 
   const categories = ["All", "AI/ML", "Cloud", "Frontend", "Backend"];
 
-  const row1 = techItems.filter((_, i) => i < 12);
-  const row2 = techItems.filter((_, i) => i >= 12);
+  const filteredItems = activeCategory
+    ? techItems.filter(item => item.category === activeCategory)
+    : techItems;
+
+  const halfIndex = Math.ceil(filteredItems.length / 2);
+  const row1 = filteredItems.slice(0, halfIndex);
+  const row2 =
+    filteredItems.slice(halfIndex).length > 0
+      ? filteredItems.slice(halfIndex)
+      : filteredItems;
 
   return (
     <section className="py-32 bg-gradient-to-b from-background-secondary to-background relative overflow-hidden">
@@ -173,11 +183,11 @@ const TechStack = memo(function TechStack() {
             <motion.button
               key={cat}
               onClick={() => setActiveCategory(cat === "All" ? null : cat)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer ${
                 (cat === "All" && activeCategory === null) ||
                 activeCategory === cat
                   ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
-                  : "bg-white text-slate-600 border border-slate-200 hover:border-blue-400"
+                  : "bg-white text-slate-600 border border-slate-200 hover:border-blue-400 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-800"
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -189,9 +199,9 @@ const TechStack = memo(function TechStack() {
       </div>
 
       {/* Marquee rows */}
-      <div className="space-y-4">
-        <MarqueeRow items={row1} direction={-1} speed={25} />
-        <MarqueeRow items={row2} direction={1} speed={20} />
+      <div className="space-y-6">
+        <MarqueeRow items={row1} direction={-1} speed={28} />
+        <MarqueeRow items={row2} direction={1} speed={24} />
       </div>
 
       {/* Stats bar */}
